@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "baseCurrency": "EUR",
+    "fixedRates": {
+      "MKD": 61.5
+    },
+    "updated": "2026-08-16T17:41:54.840Z"
+  },
+  "projects": [
+    {
+      "id": "apartment",
+      "name": "Apartment building — P+4, KP 1123/7",
+      "icon": "🏗️"
+    },
+    {
+      "id": "villa-mock",
+      "name": "Villa Renovation (mock)",
+      "icon": "🏡"
+    }
+  ],
+  "categories": [
+    {
+      "id": "permits",
+      "name": "Permits & Fees",
+      "icon": "📋",
+      "fields": [
+        {
+          "key": "authority",
+          "label": "Authority"
+        },
+        {
+          "key": "reference",
+          "label": "Reference no."
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "name": "Design & Engineering",
+      "icon": "📐",
+      "fields": [
+        {
+          "key": "firm",
+          "label": "Firm"
+        },
+        {
+          "key": "phase",
+          "label": "Phase"
+        }
+      ]
+    },
+    {
+      "id": "materials",
+      "name": "Materials",
+      "icon": "🧱",
+      "fields": [
+        {
+          "key": "supplier",
+          "label": "Supplier"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "id": "labor",
+      "name": "Labor",
+      "icon": "👷",
+      "fields": [
+        {
+          "key": "crew",
+          "label": "Crew / contractor"
+        },
+        {
+          "key": "period",
+          "label": "Work period"
+        }
+      ]
+    },
+    {
+      "id": "machinery",
+      "name": "Machinery & Equipment",
+      "icon": "🚜",
+      "fields": [
+        {
+          "key": "machine",
+          "label": "Machine"
+        },
+        {
+          "key": "hours",
+          "label": "Hours / days"
+        }
+      ]
+    },
+    {
+      "id": "transport",
+      "name": "Transport",
+      "icon": "🚚",
+      "fields": [
+        {
+          "key": "route",
+          "label": "Route"
+        }
+      ]
+    },
+    {
+      "id": "utilities",
+      "name": "Utilities & Site",
+      "icon": "⚡",
+      "fields": []
+    },
+    {
+      "id": "insurance",
+      "name": "Insurance",
+      "icon": "🛡️",
+      "fields": [
+        {
+          "key": "provider",
+          "label": "Provider"
+        },
+        {
+          "key": "reference",
+          "label": "Reference no."
+        },
+        {
+          "key": "period",
+          "label": "Period covered"
+        }
+      ]
+    },
+    {
+      "id": "meals",
+      "name": "Meals & Hospitality",
+      "icon": "🍽️",
+      "fields": [
+        {
+          "key": "venue",
+          "label": "Venue"
+        },
+        {
+          "key": "receipt",
+          "label": "Receipt no."
+        }
+      ]
+    },
+    {
+      "id": "parking",
+      "name": "Parking",
+      "icon": "🅿️",
+      "fields": [
+        {
+          "key": "location",
+          "label": "Location"
+        },
+        {
+          "key": "receipt",
+          "label": "Receipt no."
+        }
+      ]
+    }
+  ],
+  "expenses": [
+    {
+      "id": "36182d76-f570-475c-ac1e-5e084a39902c",
+      "date": "2023-03-15",
+      "amount": 1050,
+      "currency": "MKD",
+      "vendor": "Дорук Д.О.О. екс.-имп. Скопје (Ресторан Анатолија)",
+      "category": "meals",
+      "description": "Restaurant meal — 2× pilesko sote, 2× et yemekleri, salata; paid cash",
+      "details": {
+        "venue": "Ресторан Анатолија, Св. Кирил и Методиј 13/лф-22, Скопје",
+        "receipt": "Фискална сметка #0067 · АС415016801 / АС415814598 · ДДВ бр. MK4080009507637"
+      },
+      "attachments": [
+        {
+          "file": "files/6abb2c48-bb7f-4b74-8e18-b5ba56c4cca3.jpeg",
+          "originalName": "Fiskalna-Restoran-Anatolija-2023-03-15.jpeg",
+          "mime": "image/jpeg",
+          "size": 485127,
+          "uploaded": "2026-08-13T20:13:00Z",
+          "sha256": "69212fbcfe5dc122104b4945da9af7e9c60d1bb6a42974251677e4905401d870",
+          "extractedText": "ФИСКАЛНА СМЕТКА\n#0067\nДОРУК Д.О.О. ЕКС.-ИМП. СКОПЈЕ\nСВ. КИРИЛ И МЕТОДИЈ 13/ЛФ-22\nРЕСТОРАН АНАТОЛИЈА\nСВ. КИРИЛ И МЕТОДИЈ ЛО.200/220\nДАН.БРОЈ: 4080009507637\nДДВ БРОЈ: MK4080009507637\n\nPILESKO SOTE\n1 x 200,00 ... 200,00 В\nET YEMEKLERI\n1 x 250,00 ... 250,00 Б\nET YEMEKLERI\n1 x 250,00 ... 250,00 Б\nPILESKO SOTE\n1 x 200,00 ... 200,00 В\nSALATA\n1 x 150,00 ... 150,00 В\n\nПРОМЕТ ОД МАКЕДОНСКИ ПР. ... 0,00\nВКУПНО ДДВ А=18,00% ... 0,00\nВКУПНО ДДВ Б=5,00% ... 0,00\nВКУПНО ДДВ В=18,00% ... 0,00\nВКУПНО ДДВ Г=0,00% ... 0,00\nВКУПНО ДДВ ... 0,00\n\nВКУПЕН ПРОМЕТ ... 1050,00\nВКУПНО ДДВ ... 73,81\nВКУПНО ДДВ А=18,00% ... 0,00\nВКУПНО ДДВ Б=5,00% ... 23,81\nВКУПНО ДДВ В=18,00% ... 50,00\nВКУПНО ДДВ Г=0,00% ... 0,00\n\nВО ГОТОВО ... 1050,00\n\nДА КУПУВАМЕ МАКЕДОНСКИ ПРОИЗВОДИ\nЗА НАШЕ ДОБРО\nMade in Macedonia\n\n0031797\nДАТУМ 15-03-2023  ЧАС 12:54:32\nАС415016801\nАС415814598\nФИСКАЛНА СМЕТКА\n003627"
+        }
+      ],
+      "project": "apartment"
+    },
+    {
+      "id": "01965b39-bcd7-4326-bf88-804d40eb4f1e",
+      "date": "2026-05-20",
+      "amount": 300,
+      "currency": "EUR",
+      "vendor": "Mock Design Studio",
+      "category": "design",
+      "description": "Mock expense — interior concept sketches",
+      "details": {
+        "firm": "Mock Design Studio",
+        "phase": "Concept"
+      },
+      "attachments": [],
+      "project": "villa-mock"
+    },
+    {
+      "id": "9e96c542-26ce-420a-8b7c-25c6295b327a",
+      "date": "2026-06-10",
+      "amount": 850,
+      "currency": "EUR",
+      "vendor": "Mock Supplier d.o.o.",
+      "category": "materials",
+      "description": "Mock expense — bathroom tiles",
+      "details": {
+        "supplier": "Mock Supplier d.o.o.",
+        "quantity": "38 m²"
+      },
+      "attachments": [],
+      "project": "villa-mock"
+    },
+    {
+      "id": "ff2791e7-2d22-450a-9175-47792ee3e3ee",
+      "date": "2026-07-02",
+      "amount": 2700,
+      "currency": "MKD",
+      "vendor": "Џеват Ибраими",
+      "category": "insurance",
+      "description": "Personal health insurance",
+      "details": {
+        "reference": "80710-03862491"
+      },
+      "attachments": [
+        {
+          "file": "files/0f0f2960-e74b-497a-9a63-9aa89a181b92.jpeg",
+          "originalName": "Uplatnica-zdravstveno-osiguruvanje-2026-07-02.jpeg",
+          "mime": "image/jpeg",
+          "size": 3246966,
+          "uploaded": "2026-07-30T00:40:00Z",
+          "extractedText": "Комерцијална банка — УПЛАТНИЦА (образец ПП10)\n\nУПЛАТУВАЧ\nНазив и седиште на уплатувач: ЏЕВАТ ИБРАИМИ\nБанка на уплатувач: Комерцијална банка а.д. Скопје\nДаночен број или ЕМБГ и повикување на број: 80710-03862491\nЦел на дознака: Уплата на тековна трансакциска сметка\n\nПРИМАЧ\nНазив и седиште на примач: ЏЕВАТ ИБРАИМИ\nБанка на примач: Комерцијална банка а.д. Скопје\nТрансакциска сметка: 300000710386245-1\nИЗНОС: МКД 2.700,00\nШифра: 289\nНачин: 0\n\nДатум на уплата: 02.07.2026\nМесто на уплата: ТЕТОВО\nПотпис: (потпишано)\n\nФискален печат: 4668 3610 1 0154 Бр.К.Л.031/8\n02.07.26 12:14 0610 -001-",
+          "sha256": "75c1212f4d4dd2f80decbd2113995cc2ee946b01a637df9f69656e413631d62e"
+        }
+      ],
+      "project": "apartment"
+    },
+    {
+      "id": "e5c3fb8e-c39e-4e77-ba24-430a2e6bdb29",
+      "date": "2026-07-08",
+      "amount": 42000,
+      "currency": "MKD",
+      "vendor": "Mock Gradba",
+      "category": "labor",
+      "description": "Mock expense — demolition crew",
+      "details": {
+        "crew": "Mock Gradba (4 workers)",
+        "period": "July 2026"
+      },
+      "attachments": [],
+      "project": "villa-mock"
+    },
+    {
+      "id": "b7affdfa-b95b-4d41-97b6-c7c473b9eb01",
+      "date": "2026-07-30",
+      "amount": 30,
+      "currency": "MKD",
+      "vendor": "Градски Паркинг Ј.П.",
+      "category": "parking",
+      "description": "Parking at Klinicki Centar, Skopje",
+      "details": {
+        "location": "Градски Паркинг Клинички Центар, Мајка Тереза 41-А, Скопје",
+        "receipt": "#00000604 · рег.бр. AC240112845"
+      },
+      "attachments": [
+        {
+          "file": "files/2b63a872-c7b5-4c2d-af04-077eef8d7e5c.jpeg",
+          "originalName": "Fiskalna-parking-Klinicki-Centar-2026-07-30.jpeg",
+          "mime": "image/jpeg",
+          "size": 1927734,
+          "uploaded": "2026-07-30T21:50:00Z",
+          "sha256": "0cb1463934a9be847824e5a4a719ccfd8fb20fd51619b7a551097b93a0e93123",
+          "extractedText": "ФИСКАЛНА СМЕТКА\n#00000604\nГРАДСКИ ПАРКИНГ Ј.П.\nМАКЕДОНИЈА 11А/ЛО.739-СКОПЈЕ\nГРАДСКИ ПАРКИНГ КЛИНИЧКИ ЦЕНТАР\nМАЈКА ТЕРЕЗА 41-А-СКОПЈЕ\nДАН.БРОЈ: 4030003493220\nДДВ БРОЈ: MK4030003493220\n\nПАРКИНГ УСЛУГА ... 25.65 А\nКОМУНАЛ. ТАКСА ... 4.35 Г\n\nПРОМЕТ ОД МАКЕДОНСКИ ПР. ... 30.00\nВКУПНО ДДВ А=18% ... 3.91\nВКУПНО ДДВ Г= 0% ... 0.00\nВКУПНО ДДВ ... 3.91\n\nВКУПЕН ПРОМЕТ ... 30.00\nВКУПНО ДДВ ... 3.91\nВКУПНО ДДВ А=18% ... 3.91\nВКУПНО ДДВ Г= 0% ... 0.00\n\nВО ГОТОВО ... 30.00\n\nДАТУМ 30-07-2026  ЧАС 20:54\nРЕГ.БРОЈ: AC240112845\nБР.НА ФИ: AC240112845\n01982288\nФИСКАЛНА СМЕТКА"
+        }
+      ],
+      "project": "apartment"
+    }
+  ]
+}
