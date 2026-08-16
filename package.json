@@ -1,0 +1,19 @@
+{
+  "name": "expense-tracker",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Static construction-cost ledger — see README for layout.",
+  "scripts": {
+    "predev": "npm run build:data",
+    "dev": "npx --yes serve@14 -p 8080 .",
+    "build:data": "node scripts/build-expenses-data.mjs",
+    "lint": "npm run lint:html && npm run lint:css",
+    "lint:html": "htmlhint --ignore 'node_modules/**' '**/*.html'",
+    "lint:css": "stylelint '**/*.css' --ignore-path .gitignore"
+  },
+  "devDependencies": {
+    "htmlhint": "^1.5.0",
+    "stylelint": "^16.10.0",
+    "stylelint-config-recommended": "^14.0.1"
+  }
+}

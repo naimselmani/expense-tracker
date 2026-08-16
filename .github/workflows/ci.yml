@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches-ignore: [main]
+
+jobs:
+  lint:
+    name: Lint and validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Validate JS syntax
+        shell: bash
+        run: |
+          set -e
+          shopt -s globstar nullglob
+          status=0
+          for f in **/*.js; do
+            case "$f" in
+              node_modules/*) continue;;
+            esac
+            echo "Checking $f"
+            if ! node --check "$f"; then status=1; fi
+          done
+          exit $status
+
+      - name: Validate expenses data
+        run: node scripts/build-expenses-data.mjs --check
+
+      - name: Lint HTML
+        run: npm run lint:html
+
+      - name: Lint CSS
+        run: npm run lint:css
