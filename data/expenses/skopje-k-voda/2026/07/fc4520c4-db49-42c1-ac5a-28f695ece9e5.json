@@ -1,0 +1,19 @@
+{
+  "id": "fc4520c4-db49-42c1-ac5a-28f695ece9e5",
+  "date": "2026-07-16",
+  "amount": 200,
+  "currency": "EUR",
+  "vendor": "Te",
+  "category": "transport",
+  "attachments": [
+    {
+      "file": "files/50a86d24-adfe-410b-b21f-7a0dd5a6f12f.jpeg",
+      "originalName": "image.jpg",
+      "mime": "image/jpeg",
+      "size": 156566,
+      "uploaded": "2026-07-16T07:33:15.283Z",
+      "sha256": "19e939c0827ca021656e3a391da2bad641cd70b65fcacb636e19e642ea041893",
+      "extractedText": "-1,00   166,32   7.983,40\n-1,00   166,32   7.983,40\n-1,00   166,32   3.991,70 €\n-1,00   166,32   3.991,70 €\n55.883,85 €\nRELEVANT 3.\nMODEL\n0,05  0,25  0,60  1,90  1,35  0,25  1,60\n0,800x0,800   1,600x2,000\n1,70  2,19  2,20\n20000\n31   247"
+    }
+  ]
+}
