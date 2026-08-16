@@ -2,7 +2,7 @@
   "name": "expense-tracker",
   "version": "0.0.0",
   "private": true,
-  "description": "Static games arcade — see README for layout.",
+  "description": "Static construction-cost ledger — see README for layout.",
   "scripts": {
     "predev": "npm run build:data",
     "dev": "npx --yes serve@14 -p 8080 .",

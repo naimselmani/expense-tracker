@@ -3,13 +3,13 @@
 // data/expenses.json the frontend consumes.
 //
 // Source of truth (committed):
-//   apps/expenses/data/meta.json                          currency rates
-//   apps/expenses/data/projects.json                      project registry
-//   apps/expenses/data/categories.json                    category registry (shared)
-//   apps/expenses/data/expenses/<project>/<yyyy>/<mm>/<id>.json  one expense per file
+//   data/meta.json                          currency rates
+//   data/projects.json                      project registry
+//   data/categories.json                    category registry (shared)
+//   data/expenses/<project>/<yyyy>/<mm>/<id>.json  one expense per file
 //
 // Output (generated, gitignored — exists only in deploy output):
-//   apps/expenses/data/expenses.json
+//   data/expenses.json
 //
 // Usage:
 //   node scripts/build-expenses-data.mjs           build (validates first)
@@ -19,7 +19,7 @@ import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from '
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const APP_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'apps', 'expenses');
+const APP_DIR = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DATA_DIR = join(APP_DIR, 'data');
 const EXPENSES_DIR = join(DATA_DIR, 'expenses');
 const OUT_FILE = join(DATA_DIR, 'expenses.json');
