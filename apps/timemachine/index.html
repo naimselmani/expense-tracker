@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time Machine</title>
+  <script>
+    if (window.self !== window.top) document.documentElement.classList.add('embedded');
+  </script>
+  <style>
+    /* Critical inline CSS so the splash paints on the very first frame,
+       before styles.css resolves. The sub-experience ships its own
+       palette; the shell does not theme it. */
+    html, body { margin: 0; padding: 0; background: #0a0612; color: #f6e9ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif; }
+    #app-loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: radial-gradient(120% 90% at 50% 18%, #1a0b2e 0%, #0a0612 62%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 24px;
+      transition: opacity 0.45s ease;
+    }
+    #app-loading.hidden { opacity: 0; pointer-events: none; }
+    #app-loading .gl-icon {
+      font-size: 84px; line-height: 1;
+      filter: drop-shadow(0 0 18px rgba(217, 70, 239, 0.65));
+      animation: gl-spin 2.4s linear infinite;
+    }
+    @keyframes gl-spin { to { transform: rotate(360deg); } }
+    #app-loading .gl-word {
+      font-weight: 800; letter-spacing: 0.42em; font-size: 13px;
+      text-transform: uppercase; color: #e6a9ff; padding-left: 0.42em;
+    }
+    #app-loading .gl-bar {
+      position: relative; width: 188px; height: 3px;
+      background: rgba(230, 169, 255, 0.16); overflow: hidden; border-radius: 2px;
+    }
+    #app-loading .gl-bar::after {
+      content: ""; position: absolute; top: 0; left: -40%;
+      width: 40%; height: 100%;
+      background: linear-gradient(90deg, #d946ef, #22d3ee);
+      animation: gl-run 1.15s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+    @keyframes gl-run { 0% { left: -40%; } 100% { left: 100%; } }
+  </style>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app-loading">
+    <span class="gl-icon" aria-hidden="true">📼</span>
+    <span class="gl-word">Spinning up</span>
+    <div class="gl-bar" aria-label="Loading"></div>
+  </div>
+
+  <main class="tm">
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="glow" aria-hidden="true"></div>
+
+    <header class="tm-head">
+      <span class="tm-logo" aria-hidden="true">📼</span>
+      <div class="tm-titles">
+        <h1>Time Machine</h1>
+        <p>Dial a year. Watch what defined it.</p>
+      </div>
+    </header>
+
+    <!-- DIAL -->
+    <section class="dial" id="dial-view" aria-label="Year selector">
+      <div class="dial-row">
+        <button id="yr-prev" type="button" class="yr-step" aria-label="Earlier year">−</button>
+        <div class="yr-readout">
+          <div class="yr-big" id="yr-big">—</div>
+          <div class="yr-sub" id="yr-count">&nbsp;</div>
+        </div>
+        <button id="yr-next" type="button" class="yr-step" aria-label="Later year">+</button>
+      </div>
+      <input type="range" id="yr-range" class="yr-range" min="0" max="0" step="1" value="0" aria-label="Pick a year" />
+      <div class="yr-scale" id="yr-scale" aria-hidden="true"></div>
+      <div class="dial-actions">
+        <button id="travel" type="button" class="btn travel">⟲ Travel</button>
+        <button id="surprise" type="button" class="btn ghost">🎲 Surprise me</button>
+      </div>
+    </section>
+
+    <!-- STAGE -->
+    <section class="stage" id="stage-view" hidden aria-label="Now playing">
+      <div class="player-frame">
+        <div id="player"></div>
+        <div class="player-veil" id="veil" hidden>
+          <span class="veil-icon" aria-hidden="true">📡</span>
+          <span class="veil-text" id="veil-text">Tuning in…</span>
+          <a id="veil-link" class="veil-link" href="#" target="_blank" rel="noopener" hidden>Watch on YouTube ↗</a>
+        </div>
+      </div>
+      <div class="now">
+        <span class="now-year" id="now-year">—</span>
+        <div class="now-meta">
+          <div class="now-title" id="now-title">—</div>
+          <div class="now-by" id="now-by">—</div>
+        </div>
+      </div>
+      <div class="stage-actions">
+        <button id="again" type="button" class="btn">↻ Next in <span id="again-year">—</span></button>
+        <button id="reroll" type="button" class="btn ghost">🎲 Jump year</button>
+        <a id="watch" class="btn ghost" href="#" target="_blank" rel="noopener">YouTube ↗</a>
+        <button id="back" type="button" class="btn ghost">⟵ Dial</button>
+      </div>
+    </section>
+
+    <div class="hud">
+      <button id="quit" type="button" class="btn ghost">Quit</button>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

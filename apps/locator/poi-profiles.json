@@ -1,0 +1,128 @@
+{
+  "_comment": "Display profiles. `default` + `rules` gate POI classes (zoom or radius rule, null to disable). `layers` gates non-POI category groups (zoom rule or null; radius is not meaningful for fills/lines). Category keys come from `LAYER_CATEGORIES` in app.js — landuse, water, water-names, roads, road-names, aeroways, places, peaks, buildings, boundaries.",
+  "active": "default",
+  "profiles": [
+    {
+      "id": "default",
+      "label": "Default",
+      "emoji": "📍",
+      "description": "All POIs from zoom 12 — the everyday view.",
+      "default": { "type": "zoom", "value": "z12" },
+      "rules": {},
+      "layers": {}
+    },
+    {
+      "id": "walking",
+      "label": "Walking",
+      "emoji": "🚶",
+      "description": "Pedestrian-scale: food, drink, sights, water and toilets close to you.",
+      "default": { "type": "zoom", "value": "z16" },
+      "rules": {
+        "restaurant":      { "type": "zoom",   "value": "z14" },
+        "cafe":            { "type": "zoom",   "value": "z14" },
+        "bar":             { "type": "zoom",   "value": "z14" },
+        "pub":             { "type": "zoom",   "value": "z14" },
+        "fast_food":       { "type": "zoom",   "value": "z14" },
+        "bakery":          { "type": "zoom",   "value": "z15" },
+        "ice_cream":       { "type": "zoom",   "value": "z15" },
+        "drinking_water":  { "type": "radius", "value": "1km" },
+        "toilets":         { "type": "radius", "value": "500m" },
+        "atm":             { "type": "radius", "value": "500m" },
+        "pharmacy":        { "type": "radius", "value": "1km" },
+        "viewpoint":       { "type": "zoom",   "value": "z13" },
+        "monument":        { "type": "zoom",   "value": "z14" },
+        "museum":          { "type": "zoom",   "value": "z14" },
+        "art_gallery":     { "type": "zoom",   "value": "z15" },
+        "gallery":         { "type": "zoom",   "value": "z15" },
+        "park":            { "type": "zoom",   "value": "z13" },
+        "garden":          { "type": "zoom",   "value": "z14" },
+        "fuel":            null,
+        "parking":         null,
+        "taxi":            null,
+        "ferry_terminal":  null
+      },
+      "layers": {
+        "aeroways":     null,
+        "boundaries":   null,
+        "water-names":  { "type": "zoom", "value": "z13" }
+      }
+    },
+    {
+      "id": "driving",
+      "label": "Driving",
+      "emoji": "🚗",
+      "description": "Highway-scale: fuel, parking, hotels and major services from low zoom.",
+      "default": { "type": "zoom", "value": "z16" },
+      "rules": {
+        "fuel":            { "type": "zoom", "value": "z12" },
+        "parking":         { "type": "zoom", "value": "z13" },
+        "hotel":           { "type": "zoom", "value": "z12" },
+        "motel":           { "type": "zoom", "value": "z12" },
+        "hostel":          { "type": "zoom", "value": "z13" },
+        "supermarket":     { "type": "zoom", "value": "z13" },
+        "mall":            { "type": "zoom", "value": "z12" },
+        "hospital":        { "type": "zoom", "value": "z12" },
+        "clinic":          { "type": "zoom", "value": "z14" },
+        "pharmacy":        { "type": "zoom", "value": "z14" },
+        "atm":             { "type": "zoom", "value": "z14" },
+        "bank":            { "type": "zoom", "value": "z14" },
+        "police":          { "type": "zoom", "value": "z13" },
+        "toilets":         { "type": "zoom", "value": "z13" },
+        "fast_food":       { "type": "zoom", "value": "z13" },
+        "restaurant":      { "type": "zoom", "value": "z14" },
+        "cafe":            null,
+        "bar":             null,
+        "pub":             null,
+        "bakery":          null,
+        "ice_cream":       null,
+        "florist":         null,
+        "bookshop":        null,
+        "book_shop":       null,
+        "alcohol_shop":    null,
+        "viewpoint":       null,
+        "monument":        null,
+        "museum":          null,
+        "art_gallery":     null,
+        "gallery":         null,
+        "theatre":         null,
+        "cinema":          null,
+        "kindergarten":    null
+      },
+      "layers": {
+        "aeroways":   null,
+        "peaks":      null,
+        "buildings":  { "type": "zoom", "value": "z16" }
+      }
+    },
+    {
+      "id": "hiking",
+      "label": "Adventure Hiking",
+      "emoji": "🥾",
+      "description": "Outdoors: water, viewpoints and bailout amenities — survival stuff scopes to a radius around you.",
+      "default": null,
+      "rules": {
+        "drinking_water":  { "type": "radius", "value": "2km" },
+        "toilets":         { "type": "radius", "value": "1km" },
+        "restaurant":      { "type": "radius", "value": "1km" },
+        "cafe":            { "type": "radius", "value": "1km" },
+        "fast_food":       { "type": "radius", "value": "1km" },
+        "hospital":        { "type": "radius", "value": "5km" },
+        "pharmacy":        { "type": "radius", "value": "3km" },
+        "fuel":            { "type": "radius", "value": "5km" },
+        "hotel":           { "type": "radius", "value": "3km" },
+        "hostel":          { "type": "radius", "value": "3km" },
+        "park":            { "type": "zoom", "value": "z11" },
+        "garden":          { "type": "zoom", "value": "z13" },
+        "viewpoint":       { "type": "zoom", "value": "z12" },
+        "monument":        { "type": "zoom", "value": "z13" },
+        "place_of_worship":{ "type": "zoom", "value": "z14" },
+        "information":     { "type": "zoom", "value": "z13" }
+      },
+      "layers": {
+        "aeroways":     null,
+        "boundaries":   null,
+        "buildings":    { "type": "zoom", "value": "z16" }
+      }
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+name: Deploy
+
+# Pushes to `main` deploy to the live URL.
+# Pushes to any other branch deploy to /preview/<slug>/ on the same site
+# so you can test the branch on the actual live origin before merging.
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+
+permissions:
+  contents: write   # peaceiris/actions-gh-pages pushes to gh-pages
+
+# Serialize so concurrent deploys don't fight over the gh-pages branch.
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compute target directory
+        id: target
+        shell: bash
+        run: |
+          SHA="${GITHUB_SHA:0:7}"
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "dir=" >> "$GITHUB_OUTPUT"
+            echo "url_path=/" >> "$GITHUB_OUTPUT"
+            echo "label=production" >> "$GITHUB_OUTPUT"
+            echo "is_preview=false" >> "$GITHUB_OUTPUT"
+          else
+            slug=$(printf '%s' "$GITHUB_REF_NAME" | tr '/_ ' '-' | tr -cd 'a-zA-Z0-9-' | tr 'A-Z' 'a-z')
+            # Each push gets its own immutable preview URL keyed by the commit
+            # SHA, so the browser never serves a cached copy of a stale build.
+            # The Prune step below removes the branch's previous preview dir,
+            # so old previews don't pile up on gh-pages.
+            echo "slug=${slug}" >> "$GITHUB_OUTPUT"
+            echo "dir=preview/${slug}/${SHA}" >> "$GITHUB_OUTPUT"
+            echo "url_path=/preview/${slug}/${SHA}/" >> "$GITHUB_OUTPUT"
+            echo "label=preview" >> "$GITHUB_OUTPUT"
+            echo "is_preview=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build expenses data aggregate
+        # apps/expenses ships per-expense JSON files under
+        # data/expenses/<yyyy>/<mm>/; the frontend consumes a single
+        # generated data/expenses.json which is gitignored and exists
+        # only in the deploy output. Validation failures abort the
+        # deploy rather than publishing a broken ledger.
+        run: node scripts/build-expenses-data.mjs
+
+      - name: Cache-bust local assets in deployed HTML
+        # GitHub Pages serves `.js`/`.css` with `Cache-Control:
+        # max-age=600`, so without a version token Chrome happily
+        # serves stale `app.js`/`styles.css` from disk cache for ~10
+        # minutes after a deploy even when the user hard-refreshes.
+        # Append `?v=<sha>` to relative .js/.css refs in every
+        # index.html so each push produces fresh resource URLs.
+        # Applies to both production and preview deploys — the asset
+        # URLs aren't user-facing, so there's no "stability" to
+        # preserve.
+        shell: bash
+        run: |
+          SHA="${GITHUB_SHA:0:7}"
+          # Use `#` as the substitution delimiter — `|` would clash
+          # with the alternation in `(href|src)` and `(js|css)`. The
+          # path character class deliberately excludes `:` and `@`,
+          # so absolute URLs (https://unpkg.com/...) won't match.
+          while IFS= read -r -d '' f; do
+            sed -E -i 's#((href|src)=")([A-Za-z0-9_./-]+\.(js|css))"#\1\3?v='"$SHA"'"#g' "$f"
+          done < <(find . -name index.html -not -path './node_modules/*' -not -path './.git/*' -print0)
+
+      - name: Prune this branch's previous preview
+        # Wipe the branch's old preview dir so only the current SHA survives —
+        # "old preview deleted, new one added". Operates on gh-pages directly
+        # via a worktree; peaceiris (keep_files: true, below) then publishes the
+        # new SHA dir while leaving production and other branches untouched.
+        if: steps.target.outputs.is_preview == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          SLUG="${{ steps.target.outputs.slug }}"
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          if ! git fetch origin gh-pages --depth=1 2>/dev/null; then
+            echo "No gh-pages branch yet; nothing to prune."
+            exit 0
+          fi
+          git worktree add --detach ghp FETCH_HEAD
+          (
+            cd ghp
+            if [ -d "preview/${SLUG}" ]; then
+              rm -rf "preview/${SLUG}"
+              git add -A
+              if git commit -m "chore(preview): drop stale ${SLUG} preview"; then
+                for i in 1 2 3 4; do
+                  git push origin HEAD:gh-pages && break || sleep $((2 ** i))
+                done
+              fi
+            else
+              echo "No existing preview/${SLUG} to prune."
+            fi
+          )
+          # Remove the worktree before deploy so it isn't published from `.`.
+          git worktree remove ghp --force
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
+          destination_dir: ${{ steps.target.outputs.dir }}
+          keep_files: true
+          exclude_assets: '.github,node_modules,data-sources,scripts,.gitignore,package.json,package-lock.json,.htmlhintrc,.stylelintrc.json,README.md,ghp'
+          commit_message: 'deploy(${{ steps.target.outputs.label }}): ${{ github.event.head_commit.message || github.ref_name }}'
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Print deploy URL
+        run: |
+          echo "::notice title=Deployed::https://naimselmani.github.io/expense-tracker${{ steps.target.outputs.url_path }}"

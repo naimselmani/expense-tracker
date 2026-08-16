@@ -1,0 +1,582 @@
+/* Locator — flat UI floating over MapLibre vector tiles. The map fills
+   the viewport; a translucent status bar sits at the top, and a small
+   column of action buttons sits bottom-right. The user pin is a custom
+   HTML element marker. The chrome flips with [data-theme="light"]. */
+
+:root, [data-theme="dark"] {
+  --bg: #1a1d24;
+  --ink: #f1f5f9;
+  --muted: #94a3b8;
+  --hud-bg: rgba(26, 29, 36, 0.85);
+  --hud-bg-faint: rgba(26, 29, 36, 0.78);
+  --hud-border: rgba(241, 245, 249, 0.18);
+  --hud-border-soft: rgba(241, 245, 249, 0.12);
+  --hud-hover-bg: rgba(40, 45, 56, 0.95);
+  --ctrl-icon-filter: invert(1) brightness(1.6);
+}
+
+[data-theme="light"] {
+  --bg: #f5f3ee;
+  --ink: #1a1d24;
+  --muted: #525866;
+  --hud-bg: rgba(255, 255, 255, 0.88);
+  --hud-bg-faint: rgba(255, 255, 255, 0.82);
+  --hud-border: rgba(26, 29, 36, 0.20);
+  --hud-border-soft: rgba(26, 29, 36, 0.12);
+  --hud-hover-bg: rgba(220, 218, 210, 0.95);
+  --ctrl-icon-filter: none;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif;
+  /* Map UI is mostly buttons + status text, none of which should
+     be selectable on long-press. The debug log opts back in below
+     so copy still works. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.locator {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--bg);
+}
+
+.maplibregl-canvas-container,
+.maplibregl-canvas { background: var(--bg); }
+
+/* Attribution — keep readable but unobtrusive. */
+.maplibregl-ctrl-attrib {
+  font-size: 9px !important;
+  background: var(--hud-bg-faint) !important;
+  color: var(--muted) !important;
+  padding: 2px 6px !important;
+}
+
+.maplibregl-ctrl-attrib a { color: var(--ink) !important; opacity: 0.85; }
+
+.maplibregl-ctrl-attrib-button {
+  background-color: var(--hud-bg-faint) !important;
+}
+
+/* Recolour the default zoom control to match the chrome. */
+.maplibregl-ctrl button {
+  background-color: var(--hud-bg) !important;
+  color: var(--ink) !important;
+}
+.maplibregl-ctrl-group {
+  border: 1px solid var(--hud-border) !important;
+  background: transparent !important;
+}
+.maplibregl-ctrl-group:not(:empty) { box-shadow: none !important; }
+.maplibregl-ctrl button:hover { background-color: var(--hud-hover-bg) !important; }
+.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon,
+.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon { filter: var(--ctrl-icon-filter); }
+
+/* ---- Top status bar ---- */
+.hud-top {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--hud-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--hud-border-soft);
+  border-radius: 6px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.status[data-state="active"] .status-dot {
+  background: #22c55e;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+  animation: status-pulse 2s ease-out infinite;
+}
+
+.status[data-state="error"]   .status-dot { background: #ef4444; }
+.status[data-state="locating"] .status-dot {
+  background: #fb923c;
+  animation: status-blink 1s linear infinite;
+}
+
+@keyframes status-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
+  100% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+}
+
+@keyframes status-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+.meta {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.meta-sep { margin: 0 6px; opacity: 0.5; }
+
+/* ---- Bottom action stack ---- */
+.hud-bottom {
+  position: absolute;
+  bottom: 16px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.hud-btn {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--hud-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--hud-border);
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.hud-btn:hover { border-color: var(--ink); }
+
+.hud-btn[aria-pressed="true"] {
+  background: #fb923c;
+  color: #1a1d24;
+  border-color: #fb923c;
+}
+
+.hud-btn.primary {
+  background: #fb923c;
+  color: #1a1d24;
+  border-color: #fb923c;
+}
+
+.hud-btn.primary:hover { filter: brightness(1.08); }
+
+/* ---- User position pin ---- */
+.me-pin {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.me-pin-dot {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fb923c;
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.me-pin-ring {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #fb923c;
+  animation: me-pin-pulse 2s ease-out infinite;
+  z-index: 1;
+}
+
+@keyframes me-pin-pulse {
+  0%   { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .me-pin-ring,
+  .status[data-state="active"] .status-dot { animation: none; }
+}
+
+/* ---- Layers popover ---- */
+.layers-popover-wrap {
+  position: relative;
+}
+
+.layers-popover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 6px 0;
+  background: var(--hud-bg);
+  border: 1px solid var(--hud-border);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.layers-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.layers-cat-head {
+  padding: 10px 14px 4px;
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: default;
+  user-select: none;
+}
+
+.layers-cat-head:first-child { padding-top: 6px; }
+
+.layers-list li label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.layers-list li label:hover { background: var(--hud-hover-bg); }
+
+.layers-list input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: #fb923c;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ---- Debug sheet (gated on ?debug=1) ---- */
+.debug-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* `display: flex` above clobbers the [hidden] attribute's default
+   display: none — without this rule the sheet renders on page load
+   and the X button has no visible effect. */
+.debug-sheet[hidden] { display: none; }
+
+.debug-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--hud-border-soft);
+}
+
+.debug-title {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.debug-close {
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 12px;
+}
+
+.debug-log {
+  flex: 1;
+  margin: 0;
+  padding: 14px 18px;
+  overflow: auto;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--bg);
+  -webkit-overflow-scrolling: touch;
+  /* Allow text selection here so the user can copy/paste log lines
+     even without using the Copy button. */
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.debug-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+  padding: 14px 18px;
+  border-top: 1px solid var(--hud-border-soft);
+}
+
+/* ---- Debug zoom-override sliders ---- */
+.debug-section {
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--hud-border-soft);
+  padding: 10px 18px 12px;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+.debug-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--hud-fg-dim);
+  margin-bottom: 8px;
+}
+.debug-zoom-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.debug-zoom-cat {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--hud-fg-dim);
+  padding: 8px 0 2px;
+}
+.debug-zoom-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+.debug-zoom-row .debug-zoom-label {
+  font-size: 13px;
+  color: var(--hud-fg);
+}
+.debug-zoom-row .debug-zoom-val {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--hud-fg-dim);
+  min-width: 30px;
+  text-align: right;
+}
+.debug-zoom-row input[type="range"] {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0;
+}
+
+.debug-actions .hud-btn { flex: 1; }
+
+/* ---- Profile sheet (built-in POI profiles, read-only) ---- */
+.profile-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px 22px;
+  gap: 12px;
+  overflow: auto;
+}
+
+/* Same flex/[hidden] pitfall as .debug-sheet — restore display:none. */
+.profile-sheet[hidden] { display: none; }
+
+.profile-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-sheet-title {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.profile-close {
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 12px;
+}
+
+.profile-sheet-sub {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.profile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  font-family: inherit;
+  text-align: left;
+  color: var(--ink);
+  background: var(--hud-bg);
+  border: 1px solid var(--hud-border-soft);
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.profile-card:hover { border-color: var(--hud-border); }
+
+.profile-card[aria-checked="true"] {
+  border-color: #fb923c;
+  background: rgba(251, 146, 60, 0.12);
+}
+
+.profile-card-emoji {
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.profile-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.profile-card-name {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.profile-card-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.profile-card-mark {
+  margin-left: auto;
+  font-size: 18px;
+  color: #fb923c;
+  flex-shrink: 0;
+  opacity: 0;
+}
+
+.profile-card[aria-checked="true"] .profile-card-mark { opacity: 1; }
+
+#profile-btn .profile-btn-emoji {
+  margin-right: 6px;
+  font-size: 13px;
+  line-height: 1;
+  vertical-align: -1px;
+}
+
+.embedded .back-link { display: none; }
+
+@media (max-width: 380px) {
+  .hud-top { padding: 8px 12px; }
+  .status { font-size: 10px; letter-spacing: 0.14em; }
+  .hud-btn { padding: 9px 14px; font-size: 10px; letter-spacing: 0.16em; }
+}

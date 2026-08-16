@@ -1,0 +1,20 @@
+# OSM PBF sources for the daily data-refresh workflow.
+#
+# One region per line:  <slug>  <url>
+# - slug is the filename we publish under (e.g. "north-macedonia.osm.pbf")
+# - url is fetched verbatim; Geofabrik regional extracts work directly
+#
+# Lines starting with "#" and empty lines are ignored. The slug
+# doesn't have to match the upstream filename — we use the modern
+# country name on our side, but Geofabrik may have kept a legacy
+# slug for URL stability (see north-macedonia → macedonia below).
+#
+# After a successful run, files land on the gh-pages branch under
+#   /cdn/maps/osm/<slug>.osm.pbf
+# and are served by GitHub Pages at
+#   https://xhevops-claude.github.io/claude-default/cdn/maps/osm/<slug>.osm.pbf
+
+# North Macedonia — Geofabrik kept the pre-2019 "macedonia" slug
+# even though the country renamed; the URL is stable, so we use
+# their slug upstream and our preferred slug on our side.
+north-macedonia  https://download.geofabrik.de/europe/macedonia-latest.osm.pbf

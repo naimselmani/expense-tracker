@@ -1,0 +1,310 @@
+/* Tic-Tac-Toe — notebook paper. The whole page is a piece of cream
+   ruled paper; a 3×3 grid is "drawn" in pencil over it; X and O are
+   handwritten with a pencil — slightly tilted and never filling the
+   cell background. */
+
+:root {
+  --paper: #f5f1e2;        /* cream paper */
+  --rule: rgba(108, 144, 200, 0.30);   /* faint blue ruled line */
+  --ink: #2a2a2a;          /* pencil gray */
+  --ink-soft: rgba(42, 42, 42, 0.55);
+  --pencil-stroke: rgba(42, 42, 42, 0.85);
+  --grid-line: rgba(42, 42, 42, 0.7);
+  --bg: var(--paper);
+  --surface-border: rgba(42, 42, 42, 0.25);
+  --overlay-bg: rgba(245, 241, 226, 0.95);
+
+  --hand: "Patrick Hand", "Caveat", "Bradley Hand", "Marker Felt", cursive;
+  --hand-display: "Caveat", "Patrick Hand", "Bradley Hand", cursive;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  /* Cream paper with faint horizontal blue ruled lines. */
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 31px,
+      var(--rule) 31px,
+      var(--rule) 32px
+    ),
+    var(--paper);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--hand);
+}
+
+.page {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px 20px;
+}
+
+/* Page title — "tic tac toe" in marker, top of the page. */
+.title {
+  margin: 0;
+  font-family: var(--hand-display);
+  font-size: clamp(34px, 9vw, 54px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  line-height: 1;
+  transform: rotate(-1.5deg);
+}
+
+.status {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: clamp(18px, 4vw, 22px);
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+/* The 3×3 grid — drawn as pencil # symbol: only the 4 inner lines, no
+   outer border (just like a hand-drawn tic-tac-toe). */
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: min(360px, 80vmin);
+  aspect-ratio: 1 / 1;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+/* SVG overlay over the grid that draws a pencil line through the
+   winning cells. Positioned absolutely so it doesn't take a grid slot,
+   coordinate space is 3x3 (one unit per cell). */
+.win-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.win-line.visible { opacity: 1; }
+
+.win-line line {
+  stroke: var(--ink);
+  stroke-width: 0.10;
+  stroke-linecap: round;
+  fill: none;
+  /* Animated draw-on: dasharray makes the line "draw" itself when the
+     visible class is added. */
+  stroke-dasharray: 5;
+  stroke-dashoffset: 5;
+}
+
+.win-line.visible line {
+  animation: draw-line 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .win-line.visible line { animation: none; stroke-dashoffset: 0; }
+}
+
+.cell {
+  position: relative;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-family: var(--hand-display);
+  font-size: clamp(58px, 18vw, 110px);
+  line-height: 1;
+  color: var(--pencil-stroke);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  min-width: 0; min-height: 0;
+}
+
+/* Inner pencil grid lines on the cells (no outer border, no fill). */
+.cell:nth-child(1), .cell:nth-child(2), .cell:nth-child(4),
+.cell:nth-child(5), .cell:nth-child(7), .cell:nth-child(8) {
+  border-right: 2.5px solid var(--grid-line);
+}
+.cell:nth-child(1), .cell:nth-child(2), .cell:nth-child(3),
+.cell:nth-child(4), .cell:nth-child(5), .cell:nth-child(6) {
+  border-bottom: 2.5px solid var(--grid-line);
+}
+
+.cell:hover:not(:disabled) { background: transparent; }
+.cell:disabled { cursor: default; }
+
+/* The X / O is drawn via ::after using the data-mark attribute, so we
+   can give it a per-cell pencil-tilt without touching JS. */
+.cell::after {
+  content: attr(data-mark);
+  display: inline-block;
+  transform: rotate(var(--tilt, 0deg));
+  font-family: inherit;
+  font-weight: 700;
+  font-size: inherit;
+  color: inherit;
+  pointer-events: none;
+}
+
+.cell:nth-child(1) { --tilt: -4deg; }
+.cell:nth-child(2) { --tilt:  3deg; }
+.cell:nth-child(3) { --tilt: -2deg; }
+.cell:nth-child(4) { --tilt:  4deg; }
+.cell:nth-child(5) { --tilt: -3deg; }
+.cell:nth-child(6) { --tilt:  2deg; }
+.cell:nth-child(7) { --tilt: -2deg; }
+.cell:nth-child(8) { --tilt:  3deg; }
+.cell:nth-child(9) { --tilt: -4deg; }
+
+/* Win highlight — no background fill, just a slight bounce on the mark. */
+.cell.win::after {
+  animation: cell-win 0.5s ease;
+}
+
+@keyframes cell-win {
+  0%   { transform: rotate(var(--tilt, 0deg)) scale(1); }
+  40%  { transform: rotate(var(--tilt, 0deg)) scale(1.22); }
+  100% { transform: rotate(var(--tilt, 0deg)) scale(1.08); }
+}
+
+/* Scoreboard — three small handwritten numbers under the grid. */
+.scoreboard {
+  display: flex;
+  gap: 28px;
+  font-family: var(--hand);
+}
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.stat-label {
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Menu — a sticky-note-like overlay that covers the page at start
+   and after each round. */
+.menu {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: var(--overlay-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px;
+  transition: opacity 0.3s ease;
+}
+
+.menu[data-state="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu-title {
+  margin: 0;
+  font-family: var(--hand-display);
+  font-size: clamp(54px, 16vw, 96px);
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  line-height: 0.95;
+  transform: rotate(-2deg);
+}
+
+.menu-tagline {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: clamp(15px, 3.5vw, 18px);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.menu-actions {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+  width: 100%;
+  max-width: 240px;
+  margin-top: 8px;
+}
+
+button {
+  font-family: var(--hand);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 6px 22px 8px;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: filter 0.1s ease;
+}
+
+button:hover { filter: brightness(1.08); }
+button:active { transform: translateY(1px); }
+
+.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: 4px 22px 6px;
+}
+
+.ghost:hover { background: var(--ink); color: var(--paper); }
+
+.embedded .back-link { display: none; }
+
+@media (max-width: 480px) {
+  .page { padding: 18px 16px; gap: 10px; }
+  .title { font-size: clamp(30px, 10vw, 42px); }
+  .board { width: min(320px, 88vmin); }
+  .scoreboard { gap: 22px; }
+}

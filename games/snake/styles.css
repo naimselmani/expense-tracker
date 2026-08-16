@@ -1,0 +1,265 @@
+/* Snake — single LCD layout for both skins. The skin picker only
+   changes how the snake (and food) are drawn on the canvas; the page
+   chrome, palette, font, and scoreboard format are the same:
+
+     classic   solid dark-olive snake, simple inset food dot
+     nokia     stippled 5-dot pixel-art snake, 4-dot diamond food
+
+   The drawing split lives in app.js' draw(); CSS doesn't need
+   skin-specific overrides anymore. */
+
+:root {
+  --lcd: #a8b820;            /* olive-yellow LCD background */
+  --ink: #0f380f;            /* dark olive — snake, text, frame */
+  --ink-soft: rgba(15, 56, 15, 0.55);
+
+  --bg: var(--lcd);
+  --muted: var(--ink-soft);
+  --surface-strong: rgba(15, 56, 15, 0.10);
+  --surface-border: rgba(15, 56, 15, 0.50);
+
+  --snake: #0f380f;
+  --food: #0f380f;
+  --grid-line: rgba(15, 56, 15, 0.05);
+  --overlay-bg: rgba(168, 184, 32, 0.94);
+  --accent: #0f380f;
+
+  --canvas-frame: 6px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+.stage {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Whole-page swipe controls — disable browser pan/zoom so the
+     touch handlers in app.js own all gestures. Buttons remain
+     tappable because click events are unaffected. */
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Score row — Nokia-style, no labels, just the padded numbers in the
+   corners of the LCD. */
+.scoreboard {
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 14px 24px 10px;
+}
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.stat-label { display: none; }
+
+.stat-value {
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+/* Playfield */
+.canvas-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+canvas {
+  display: block;
+  width: min(100%, calc(100vh - 160px));
+  aspect-ratio: 1 / 1;
+  max-height: 100%;
+  background: var(--bg);
+  border: var(--canvas-frame) solid var(--ink);
+  image-rendering: pixelated;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 16px;
+  background: var(--overlay-bg);
+  text-align: center;
+  padding: 24px;
+  transition: opacity 0.3s ease;
+}
+
+.overlay[data-state="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.overlay h2 {
+  margin: 0;
+  font-family: inherit;
+  font-size: clamp(28px, 8vw, 44px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.overlay p {
+  margin: 0;
+  color: var(--ink-soft);
+  max-width: 280px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  font-family: inherit;
+}
+
+/* Skin picker — small toggle in the start menu. Only affects the
+   snake/food drawing; layout is identical between skins. */
+.skin-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.skin-btn {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--surface-border);
+  padding: 7px 14px;
+  border-radius: 0;
+  cursor: pointer;
+  margin: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+}
+
+.skin-btn:hover { border-color: var(--ink); }
+
+.skin-btn.active {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.overlay-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+button#action-btn,
+button#quit-btn {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--ink);
+  padding: 12px 28px;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  margin: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: filter 0.1s ease;
+}
+
+button#action-btn:hover,
+button#quit-btn:hover { filter: brightness(1.15); }
+button#action-btn:active,
+button#quit-btn:active { transform: translateY(1px); }
+
+.ghost {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border: 2px solid var(--ink) !important;
+}
+
+.ghost:hover { background: var(--ink) !important; color: var(--bg) !important; filter: none; }
+
+.hint {
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 10px;
+  color: var(--ink-soft);
+  padding: 10px 20px 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-family: inherit;
+}
+
+.hint-keys { display: inline; }
+.hint-touch { display: none; }
+
+@media (hover: none), (max-width: 640px) {
+  .hint-keys { display: none; }
+  .hint-touch { display: inline; }
+}
+
+kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  font-family: inherit;
+  font-size: 10px;
+  color: var(--ink);
+  background: rgba(15, 56, 15, 0.10);
+  border: 1px solid rgba(15, 56, 15, 0.30);
+  border-radius: 0;
+  margin: 0 1px;
+}
+
+.embedded .back-link { display: none; }
+
+@media (max-width: 480px) {
+  .scoreboard { padding: 12px 16px 8px; }
+  .stat-value { font-size: 19px; }
+  .canvas-wrap { padding: 8px; }
+  :root { --canvas-frame: 4px; }
+  .hint { padding: 8px 16px 12px; }
+}

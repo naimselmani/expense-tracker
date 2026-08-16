@@ -1,0 +1,126 @@
+/* Themes — flat palettes, no gradients. Each theme defines a single
+   accent color paired with a bg/ink/surface set. The home page uses
+   these; games are standalone and ignore them. */
+
+:root, [data-theme="noir"] {
+  --bg: #08080a;
+  --ink: #f5f5f4;
+  --muted: #8a8a8e;
+  --surface: #131316;
+  --surface-strong: #1c1c20;
+  --surface-border: #2a2a2e;
+  --accent: #22d3ee;        /* cyan */
+  --accent-ink: #08080a;
+}
+
+[data-theme="bone"] {
+  --bg: #f3f1ec;
+  --ink: #18181b;
+  --muted: #71717a;
+  --surface: #ffffff;
+  --surface-strong: #e8e6e0;
+  --surface-border: #d4d2cb;
+  --accent: #ef4444;        /* red */
+  --accent-ink: #ffffff;
+}
+
+[data-theme="steel"] {
+  --bg: #1a1d24;
+  --ink: #f1f5f9;
+  --muted: #94a3b8;
+  --surface: #232730;
+  --surface-strong: #2d323d;
+  --surface-border: #353a47;
+  --accent: #fb923c;        /* orange */
+  --accent-ink: #1a1d24;
+}
+
+[data-theme="jade"] {
+  --bg: #0a1410;
+  --ink: #ecfdf5;
+  --muted: #6b8a7e;
+  --surface: #122019;
+  --surface-strong: #1a2a22;
+  --surface-border: #243930;
+  --accent: #10b981;        /* emerald */
+  --accent-ink: #0a1410;
+}
+
+[data-theme="ember"] {
+  --bg: #170a08;
+  --ink: #fff5e8;
+  --muted: #b69380;
+  --surface: #241310;
+  --surface-strong: #2f1a16;
+  --surface-border: #402420;
+  --accent: #f59e0b;        /* amber */
+  --accent-ink: #170a08;
+}
+
+/* Per-tile colors — constant across themes so each card keeps its
+   identity. Flat solid colors. */
+:root {
+  --tile-snake: #22c55e;        /* emerald-500 */
+  --tile-tic-tac-toe: #f97316;  /* orange-500 */
+  --tile-memory: #8b5cf6;       /* violet-500 */
+  --tile-crusaders: #e7b85b;    /* desert gold */
+  --tile-crusaders3d: #c2783a;  /* burnt sienna */
+  --tile-locator: #fb923c;      /* amber-400 */
+  --tile-terrain: #5a7c3a;      /* moss / mountain */
+  --tile-timemachine: #d946ef;  /* fuchsia / synthwave */
+  --tile-binge: #ef4444;        /* red-500 / play */
+  --tile-marathon: #eab308;     /* marquee gold */
+  --tile-usage: #d97757;        /* Claude terracotta */
+  --tile-expenses: #f5a623;     /* safety amber */
+  --tile-buildtrack: #1ec97e;   /* BuildTrack green */
+  --tile-directions: #38bdf8;   /* sky-400 */
+}
+
+/* Hide the in-game back link when the page is rendered inside the
+   gallery's iframe. */
+.embedded .back-link { display: none; }
+
+/* --- Theme picker (shared) --- */
+.theme-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.swatch::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+
+.swatch:hover { transform: scale(1.15); }
+
+.swatch.active::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  pointer-events: none;
+}
+
+.swatch[data-theme="noir"]   { background: #22d3ee; color: #22d3ee; }
+.swatch[data-theme="bone"]   { background: #ef4444; color: #ef4444; }
+.swatch[data-theme="steel"]  { background: #fb923c; color: #fb923c; }
+.swatch[data-theme="jade"]   { background: #10b981; color: #10b981; }
+.swatch[data-theme="ember"]  { background: #f59e0b; color: #f59e0b; }

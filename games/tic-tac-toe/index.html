@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic-Tac-Toe</title>
+  <script>
+    if (window.self !== window.top) document.documentElement.classList.add('embedded');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <!-- Critical inline CSS so the loading screen paints on the very first
+       frame, before styles.css resolves. -->
+  <style>
+    html, body { margin: 0; padding: 0; background: #f5f1e2; color: #2a2a2a;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif; }
+    #game-loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #f5f1e2;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 24px;
+      transition: opacity 0.4s ease;
+    }
+    #game-loading.hidden { opacity: 0; pointer-events: none; }
+    #game-loading .gl-icon {
+      font-size: 88px; line-height: 1;
+      color: #2a2a2a; font-weight: 600;
+      letter-spacing: -0.05em;
+    }
+    #game-loading .gl-bar {
+      position: relative; width: 180px; height: 2px;
+      background: rgba(42,42,42,0.18); overflow: hidden;
+    }
+    #game-loading .gl-bar::after {
+      content: ""; position: absolute; top: 0; left: -40%;
+      width: 40%; height: 100%; background: #2a2a2a;
+      animation: gl-bar 1.2s cubic-bezier(0.45,0,0.55,1) infinite;
+    }
+    @keyframes gl-bar { 0% { left: -40%; } 100% { left: 100%; } }
+  </style>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="game-loading">
+    <span class="gl-icon" aria-hidden="true">×○</span>
+    <div class="gl-bar" aria-label="Loading"></div>
+  </div>
+
+  <main class="page">
+    <h1 class="title">tic tac toe</h1>
+    <p class="status" id="status">x to play</p>
+
+    <div class="board" id="board" role="grid" aria-label="Tic-tac-toe board">
+      <button class="cell" data-i="0" type="button" aria-label="Cell 1"></button>
+      <button class="cell" data-i="1" type="button" aria-label="Cell 2"></button>
+      <button class="cell" data-i="2" type="button" aria-label="Cell 3"></button>
+      <button class="cell" data-i="3" type="button" aria-label="Cell 4"></button>
+      <button class="cell" data-i="4" type="button" aria-label="Cell 5"></button>
+      <button class="cell" data-i="5" type="button" aria-label="Cell 6"></button>
+      <button class="cell" data-i="6" type="button" aria-label="Cell 7"></button>
+      <button class="cell" data-i="7" type="button" aria-label="Cell 8"></button>
+      <button class="cell" data-i="8" type="button" aria-label="Cell 9"></button>
+      <svg class="win-line" id="win-line" viewBox="0 0 3 3" preserveAspectRatio="none" aria-hidden="true">
+        <line id="win-line-segment" x1="0" y1="0" x2="0" y2="0" />
+      </svg>
+    </div>
+
+    <div class="scoreboard">
+      <div class="stat"><span class="stat-label">x</span><span class="stat-value" id="score-x">0</span></div>
+      <div class="stat"><span class="stat-label">draw</span><span class="stat-value" id="score-d">0</span></div>
+      <div class="stat"><span class="stat-label">o</span><span class="stat-value" id="score-o">0</span></div>
+    </div>
+
+    <!-- Main menu — shown at start, after game over. Looks like a note
+         scribbled at the top of the page. -->
+    <div class="menu" id="menu" data-state="ready">
+      <h2 class="menu-title" id="menu-title">tic tac toe</h2>
+      <p class="menu-tagline" id="menu-tagline">three in a row · hot-seat for two</p>
+      <div class="menu-actions">
+        <button id="play-btn" type="button">play</button>
+        <button id="reset-btn" type="button" class="ghost" hidden>reset scores</button>
+        <button id="quit-btn" type="button" class="ghost">quit</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

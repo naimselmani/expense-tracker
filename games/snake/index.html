@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snake</title>
+  <script>
+    if (window.self !== window.top) document.documentElement.classList.add('embedded');
+  </script>
+  <!-- Critical inline CSS so the loading screen paints on the first
+       frame, before styles.css resolves. -->
+  <style>
+    /* The page is the LCD for both skins; only the snake drawing
+       changes between Classic and Nokia 3310. */
+    html, body { margin: 0; padding: 0; background: #a8b820; color: #0f380f;
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+    #game-loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #a8b820;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 22px;
+      transition: opacity 0.4s ease;
+    }
+    #game-loading.hidden { opacity: 0; pointer-events: none; }
+    #game-loading .gl-icon { font-size: 88px; line-height: 1; filter: saturate(0.85) brightness(0.85); }
+    #game-loading .gl-bar {
+      position: relative; width: 180px; height: 4px;
+      background: rgba(15,56,15,0.20); overflow: hidden;
+    }
+    #game-loading .gl-bar::after {
+      content: ""; position: absolute; top: 0; left: -40%;
+      width: 40%; height: 100%; background: #0f380f;
+      animation: gl-bar 1.2s cubic-bezier(0.45,0,0.55,1) infinite;
+    }
+    @keyframes gl-bar { 0% { left: -40%; } 100% { left: 100%; } }
+  </style>
+  <script>
+    // Apply the saved skin BEFORE the loader paints. Layout is the same
+    // for both skins; this attribute only affects how the snake renders
+    // on the canvas.
+    try {
+      var s = localStorage.getItem('snake-skin');
+      document.documentElement.dataset.skin = (s === 'nokia' ? 'nokia' : 'classic');
+    } catch (e) {
+      document.documentElement.dataset.skin = 'classic';
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="game-loading">
+    <span class="gl-icon" aria-hidden="true">🐍</span>
+    <div class="gl-bar" aria-label="Loading"></div>
+  </div>
+
+  <main class="stage">
+    <div class="scoreboard">
+      <div class="stat">
+        <span class="stat-label">Score</span>
+        <span class="stat-value" id="score">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Best</span>
+        <span class="stat-value" id="best">0</span>
+      </div>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="game" width="480" height="480" aria-label="Snake game board"></canvas>
+      <div class="overlay" id="overlay" data-state="ready">
+        <h2 id="overlay-title">Snake</h2>
+        <p id="overlay-text">Eat the dots. Don't bite yourself.</p>
+        <div class="skin-options" role="group" aria-label="Skin">
+          <button class="skin-btn" data-skin="classic" type="button">Classic</button>
+          <button class="skin-btn" data-skin="nokia"   type="button">Nokia 3310</button>
+        </div>
+        <div class="overlay-actions">
+          <button id="action-btn" type="button">Play</button>
+          <button id="quit-btn" type="button" class="ghost">Quit</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hint">
+      <span class="hint-keys"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> or <kbd>WASD</kbd> · <kbd>Space</kbd> pause · <kbd>Enter</kbd> restart</span>
+      <span class="hint-touch">Swipe to move · tap to pause</span>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

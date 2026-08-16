@@ -1,0 +1,12 @@
+[
+  {
+    "id": "apartment",
+    "name": "Apartment building — P+4, KP 1123/7",
+    "icon": "🏗️"
+  },
+  {
+    "id": "villa-mock",
+    "name": "Villa Renovation (mock)",
+    "icon": "🏡"
+  }
+]

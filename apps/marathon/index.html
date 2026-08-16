@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marathon</title>
+  <script>
+    if (window.self !== window.top) document.documentElement.classList.add('embedded');
+  </script>
+  <style>
+    /* Critical inline CSS: paint the splash on the first frame. */
+    html, body { margin: 0; padding: 0; background: #0a0b10; color: #f5f4ef;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif;
+      touch-action: manipulation; }
+    #app-loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: radial-gradient(120% 90% at 50% 16%, #1a1710 0%, #0a0b10 64%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 22px; transition: opacity 0.45s ease;
+    }
+    #app-loading.hidden { opacity: 0; pointer-events: none; }
+    #app-loading .gl-icon { font-size: 80px; line-height: 1; filter: drop-shadow(0 0 16px rgba(234, 179, 8, 0.55)); }
+    #app-loading .gl-word { font-weight: 800; letter-spacing: 0.4em; font-size: 13px;
+      text-transform: uppercase; color: #fde68a; padding-left: 0.4em; }
+    #app-loading .gl-bar { position: relative; width: 184px; height: 3px;
+      background: rgba(253, 230, 138, 0.16); overflow: hidden; border-radius: 2px; }
+    #app-loading .gl-bar::after { content: ""; position: absolute; top: 0; left: -40%;
+      width: 40%; height: 100%; background: linear-gradient(90deg, #eab308, #f97316);
+      animation: gl-run 1.15s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+    @keyframes gl-run { 0% { left: -40%; } 100% { left: 100%; } }
+  </style>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app-loading">
+    <span class="gl-icon" aria-hidden="true">🎬</span>
+    <span class="gl-word">Loading</span>
+    <div class="gl-bar" aria-label="Loading"></div>
+  </div>
+
+  <main class="marathon">
+    <header class="mh-head">
+      <span class="mh-logo" aria-hidden="true">🎬</span>
+      <div class="mh-titles">
+        <h1>Marathon</h1>
+        <p>Every film by your actors, in order.</p>
+      </div>
+    </header>
+
+    <!-- Actor pool — static, always visible -->
+    <section class="pool" aria-label="Actor pool">
+      <span class="pool-label">Actors</span>
+      <div class="pool-chips" id="pool-chips"></div>
+    </section>
+
+    <!-- Filters (collapsible): actors + date cutoff + show-watched -->
+    <section class="filters" id="flt" hidden>
+      <button class="filters-head" id="flt-toggle" type="button" aria-expanded="false" aria-controls="flt-body">
+        <span class="filters-chev" aria-hidden="true">▸</span>
+        <span class="filters-title">Filters</span>
+        <span class="filters-summary" id="flt-summary"></span>
+      </button>
+
+      <div class="filters-body" id="flt-body" hidden>
+        <div class="fgroup">
+          <div class="fgroup-head">
+            <span class="fgroup-label">Actors</span>
+            <span class="fgroup-actions">
+              <button id="src-all" type="button" class="linkbtn">Select all</button>
+              <button id="src-none" type="button" class="linkbtn">Clear all</button>
+            </span>
+          </div>
+          <div class="col-switches" id="src-switches"></div>
+        </div>
+
+        <div class="fgroup">
+          <div class="fgroup-head">
+            <span class="fgroup-label">Released up to</span>
+            <span class="fgroup-actions"><button id="flt-reset" type="button" class="linkbtn">Today</button></span>
+          </div>
+          <div class="dslider">
+            <div class="dslider-row"><span class="dslider-label">Year</span><span class="dslider-value" id="yr-value">—</span></div>
+            <input type="range" id="f-year" class="d-range" min="0" max="0" step="1" value="0" aria-label="Year" />
+          </div>
+          <div class="dslider">
+            <div class="dslider-row"><span class="dslider-label">Month</span><span class="dslider-value" id="mo-value">—</span></div>
+            <input type="range" id="f-month" class="d-range" min="1" max="12" step="1" value="1" aria-label="Month" />
+          </div>
+          <div class="dslider">
+            <div class="dslider-row"><span class="dslider-label">Day</span><span class="dslider-value" id="dy-value">—</span></div>
+            <input type="range" id="f-day" class="d-range" min="1" max="31" step="1" value="1" aria-label="Day" />
+          </div>
+        </div>
+
+        <div class="fgroup-foot">
+          <label class="switch">
+            <input type="checkbox" id="show-watched" class="switch-input" checked />
+            <span class="switch-track" aria-hidden="true"></span>
+            <span class="switch-text">Show already-watched films</span>
+          </label>
+          <span class="foot-actions">
+            <button id="refresh-data" type="button" class="linkbtn">Refresh data</button>
+            <button id="clear-watched" type="button" class="linkbtn">Clear watched</button>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <div class="toolbar" id="toolbar" hidden>
+      <div class="tb-item">
+        <label class="tb-label" for="sel-sort">Sort</label>
+        <select id="sel-sort" class="tb-select">
+          <option value="old">Oldest first</option>
+          <option value="new">Newest first</option>
+        </select>
+      </div>
+      <div class="tb-item">
+        <label class="tb-label" for="sel-group">Group</label>
+        <select id="sel-group" class="tb-select">
+          <option value="none">Timeline</option>
+          <option value="source">Actor</option>
+          <option value="year">Year</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="progress" id="progress" hidden>
+      <div class="progress-bar"><span id="progress-fill"></span></div>
+      <span class="progress-text" id="progress-text">—</span>
+    </div>
+
+    <button class="upnext" id="upnext" type="button" hidden>
+      <span class="upnext-poster" id="upnext-poster"></span>
+      <span class="upnext-meta">
+        <span class="upnext-tag">Up next</span>
+        <span class="upnext-title" id="upnext-title">—</span>
+        <span class="upnext-sub" id="upnext-sub">—</span>
+      </span>
+      <span class="upnext-go" aria-hidden="true">›</span>
+    </button>
+
+    <section class="sections" id="sections" aria-label="Movies"></section>
+
+    <section class="status-panel" id="x-status" hidden>
+      <div class="status-icon" aria-hidden="true">🍿</div>
+      <div class="status-msg" id="x-msg">—</div>
+      <button id="x-action" type="button" class="btn primary" hidden></button>
+    </section>
+
+    <div class="hud">
+      <button id="quit" type="button" class="btn ghost">Quit</button>
+    </div>
+  </main>
+
+  <!-- Film detail -->
+  <div class="detail-modal" id="detail-modal" hidden role="dialog" aria-label="Movie details">
+    <div class="detail-card" id="detail-card">
+      <button id="detail-close" type="button" class="detail-x" aria-label="Close">×</button>
+      <div class="detail-hero">
+        <div class="detail-poster" id="detail-poster"></div>
+        <div class="detail-headline">
+          <h2 class="detail-title" id="detail-title">—</h2>
+          <p class="detail-sub" id="detail-sub">—</p>
+          <div class="detail-facts" id="detail-facts"></div>
+          <div class="detail-actions" id="detail-actions"></div>
+        </div>
+      </div>
+      <p class="detail-plot" id="detail-plot"></p>
+      <div class="detail-saga" id="detail-saga" hidden></div>
+      <h3 class="cast-head" id="cast-head" hidden>Cast</h3>
+      <div class="cast-grid" id="cast-grid"></div>
+      <div class="detail-links" id="detail-links"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

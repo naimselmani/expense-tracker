@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title data-i18n="title">Terrain</title>
+  <script>
+    if (window.self !== window.top) document.documentElement.classList.add('embedded');
+  </script>
+  <style>
+    /* Critical inline CSS — paints the loader on the very first
+       frame, before styles.css resolves. */
+    html, body { margin: 0; padding: 0; height: 100%;
+      background: #0c1118; color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif; }
+    #app-loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: inherit;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 22px;
+      transition: opacity 0.4s ease;
+    }
+    #app-loading.hidden { opacity: 0; pointer-events: none; }
+    #app-loading .gl-icon { font-size: 88px; line-height: 1; }
+    #app-loading .gl-bar {
+      position: relative; width: 180px; height: 3px;
+      background: rgba(255, 255, 255, 0.18); overflow: hidden;
+    }
+    #app-loading .gl-bar::after {
+      content: ""; position: absolute; top: 0; left: -40%;
+      width: 40%; height: 100%; background: #5a7c3a;
+      animation: gl-bar 1.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+    @keyframes gl-bar { 0% { left: -40%; } 100% { left: 100%; } }
+  </style>
+  <link rel="stylesheet" href="styles.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+      "delaunator": "https://unpkg.com/delaunator@5.0.1/index.js",
+      "robust-predicates": "https://unpkg.com/robust-predicates@3.0.2/index.js",
+      "dxf-parser": "https://esm.sh/dxf-parser@1.1.2"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app-loading">
+    <span class="gl-icon" aria-hidden="true">⛰️</span>
+    <div class="gl-bar" aria-label="Loading"></div>
+  </div>
+
+  <main class="terrain">
+    <div id="canvas-wrap" class="canvas-wrap" aria-label="3D terrain viewer"></div>
+
+    <div id="hint" class="hint" hidden>
+      <span class="hint-icon" aria-hidden="true">📂</span>
+      <span class="hint-text" data-i18n="hint.text">Upload a coordinate file to build a 3D mesh.</span>
+      <span class="hint-sub" data-i18n-html="hint.sub">Each line: <code>x  y  elevation</code> (tabs or spaces; an optional id column is ignored).</span>
+    </div>
+
+    <details id="readout" class="readout" hidden>
+      <summary class="readout-head">
+        <span class="readout-icon" aria-hidden="true">&#128200;</span>
+        <span class="readout-title" data-i18n="readout.title">Stats</span>
+        <span class="readout-caret" aria-hidden="true">&#9662;</span>
+      </summary>
+      <dl class="readout-grid">
+        <div><dt data-i18n="readout.parcelHeight">Parcel height</dt><dd id="readout-parcel-height">&mdash;</dd></div>
+        <div><dt data-i18n="readout.parcelArea">Parcel area</dt><dd id="readout-parcel-area">&mdash;</dd></div>
+      </dl>
+      <p class="readout-note" data-i18n="readout.note">Areas assume the file's X/Y are metres.</p>
+    </details>
+
+    <details id="layers" class="layers" hidden>
+      <summary class="layers-head">
+        <span class="layers-icon" aria-hidden="true">&#9881;&#65039;</span>
+        <span class="layers-title" data-i18n="settings.title">Settings</span>
+        <span class="readout-caret" aria-hidden="true">&#9662;</span>
+      </summary>
+      <div class="debug-title" data-i18n="section.layers">Layers</div>
+      <div class="layers-controls">
+        <label class="layer-toggle layers-master-label">
+          <input type="checkbox" id="layers-master" />
+          <span data-i18n="layers.all">All</span>
+        </label>
+        <div class="layers-actions">
+          <button type="button" class="layers-save" id="layers-save" disabled data-i18n-title="btn.save" title="Save settings" aria-label="Save settings">&#128190;</button>
+          <button type="button" class="layers-reset" id="layers-reset" data-i18n="layers.reset">Reset</button>
+        </div>
+      </div>
+      <ul id="layers-list" class="layers-list"></ul>
+      <div class="layers-debug">
+        <div class="debug-title" data-i18n="debug.surfaceGrid">Surface grid</div>
+        <div class="dpad-block">
+          <span class="debug-label" data-i18n="debug.rotationOffset">Rotation offset</span>
+          <div class="rot-row">
+            <button type="button" class="rot-btn" data-rot="CCW" aria-label="Rotate counter-clockwise">&#8635;</button>
+            <button type="button" class="rot-btn rot-c" data-rot="C" aria-label="Reset rotation">&#9675;</button>
+            <button type="button" class="rot-btn" data-rot="CW" aria-label="Rotate clockwise">&#8634;</button>
+          </div>
+          <span class="debug-value" id="dbg-gridsurf-rot-val">0&deg;</span>
+        </div>
+        <div class="dpad-block">
+          <span class="debug-label" data-i18n="debug.positionOffset">Position offset</span>
+          <div class="dpad">
+            <button type="button" class="dpad-btn dpad-n" data-dpad="N" aria-label="North">&#9650;</button>
+            <button type="button" class="dpad-btn dpad-w" data-dpad="W" aria-label="West">&#9664;</button>
+            <button type="button" class="dpad-btn dpad-c" data-dpad="C" aria-label="Reset to origin">&#9675;</button>
+            <button type="button" class="dpad-btn dpad-e" data-dpad="E" aria-label="East">&#9654;</button>
+            <button type="button" class="dpad-btn dpad-s" data-dpad="S" aria-label="South">&#9660;</button>
+          </div>
+          <span class="debug-value" id="dbg-gridsurf-off-val">0.0, 0.0 m</span>
+        </div>
+      </div>
+    </details>
+
+    <div id="lang-toggle" class="lang-toggle" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="de" aria-pressed="false">DE</button>
+    </div>
+
+    <div class="hud-bottom">
+      <input id="file-input"   type="file" accept=".txt,.csv,.xyz,.tsv,text/plain" hidden />
+      <input id="parcel-input" type="file" accept=".dxf,text/plain" hidden />
+      <button id="upload-btn" type="button" class="hud-btn primary" style="display:none" data-i18n="btn.upload">Upload file</button>
+      <button id="parcel-btn" type="button" class="hud-btn" hidden style="display:none" data-i18n="btn.parcels">Parcels (DXF)</button>
+      <button id="reset-btn"  type="button" class="hud-btn" hidden data-i18n="btn.resetView">Reset view</button>
+      <div class="export-wrap">
+        <button id="export-btn" type="button" class="hud-btn" hidden aria-haspopup="menu" aria-expanded="false" data-i18n-html="btn.export">Export &#9662;</button>
+        <div id="export-menu" class="export-menu" hidden role="menu">
+          <button type="button" class="hud-btn" data-fmt="glb">GLB</button>
+          <button type="button" class="hud-btn" data-fmt="obj">OBJ</button>
+        </div>
+      </div>
+      <button id="quit-btn"   type="button" class="hud-btn ghost" data-i18n="btn.quit">Quit</button>
+    </div>
+
+    <div id="error" class="error" hidden role="alert"></div>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

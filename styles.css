@@ -1,0 +1,532 @@
+/* Home — slick console aesthetic. No gradients, no aurora. Sharp lines,
+   strong typography, flat color tiles. */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* ==========================================================================
+   Top bar
+   ========================================================================== */
+.topbar {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--surface-border);
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  display: inline-block;
+}
+
+.brand-name {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Pager — three horizontal slides (Tools / Apps / Games). Native
+   horizontal scroll with mandatory snap; the user lands on Games by
+   default (set in JS) and can swipe across to the other sections.
+   ========================================================================== */
+/* ==========================================================================
+   Pager — transform-driven barrel carousel. Each slide is absolutely
+   positioned over the pager; JS renders them at their visually-nearest
+   copy of a continuous logical position (modulo N), so the carousel
+   loops infinitely with no clones, no native scroll-snap, no edges.
+   touch-action: pan-y lets the inner Games grid scroll vertically
+   while we own the horizontal axis.
+   ========================================================================== */
+.pager {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.page {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px 0;
+  overflow: hidden;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.page-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: clamp(28px, 7vw, 44px);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.page-meta {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Empty-state placeholder for the Tools / Apps slides until they
+   have real content. Centered, flat, matches the card aesthetic. */
+.empty {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px 16px 64px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.empty-icon {
+  font-size: clamp(56px, 14vw, 96px);
+  line-height: 1;
+  opacity: 0.5;
+  filter: saturate(0.4);
+}
+
+.empty-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.empty-text {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Hero block on the Home slide — same flat aesthetic as the empty
+   states but with a stronger title since it's the landing screen. */
+.hero {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px 16px 64px;
+  text-align: center;
+}
+
+.hero-icon {
+  font-size: clamp(72px, 18vw, 120px);
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.18));
+}
+
+.hero-title {
+  margin: 0;
+  font-size: clamp(28px, 8vw, 44px);
+  font-weight: 900;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.hero-text {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Pager nav — wheel-picker style: previous and next sections sit on
+   either side of the active title, smaller and dimmer. The whole
+   strip lives just under the pager; clicking prev/next paginates by
+   one slide in either direction. The carousel loops both ways. */
+.pager-nav {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px 6px;
+}
+
+.pager-nav-btn {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 6px 8px;
+  margin: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: color 0.15s ease;
+}
+
+.pager-nav-btn:hover { color: var(--ink); }
+
+.pager-nav-prev { justify-self: end; text-align: right; }
+.pager-nav-next { justify-self: start; text-align: left; }
+
+.pager-nav-prev::before { content: "‹"; opacity: 0.6; margin-right: 6px; }
+.pager-nav-next::after  { content: "›"; opacity: 0.6; margin-left: 6px; }
+
+.pager-nav-current {
+  position: relative;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 6px 14px 8px;
+}
+
+.pager-nav-current::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 2px;
+  height: 2px;
+  background: var(--accent);
+}
+
+@media (max-width: 380px) {
+  .pager-nav { gap: 10px; padding: 10px 16px 2px; }
+  .pager-nav-btn { font-size: 9px; letter-spacing: 0.18em; }
+  .pager-nav-current { font-size: 12px; letter-spacing: 0.22em; }
+}
+
+/* ==========================================================================
+   Game grid
+   ========================================================================== */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 24px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 720px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+}
+@media (min-width: 1000px) {
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+  overflow: hidden;
+  position: relative;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.card a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.card-art {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  background: var(--g1, var(--surface-strong));
+}
+
+.card[data-tile="snake"]         { --g1: var(--tile-snake); }
+.card[data-tile="tic-tac-toe"]   { --g1: var(--tile-tic-tac-toe); }
+.card[data-tile="memory"]        { --g1: var(--tile-memory); }
+.card[data-tile="locator"]       { --g1: var(--tile-locator); }
+.card[data-tile="directions"]    { --g1: var(--tile-directions); }
+
+.card-icon {
+  font-size: clamp(40px, 11vw, 72px);
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.18));
+}
+
+.card-body {
+  padding: 12px 14px;
+  border-top: 1px solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.card-meta {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   Coming-soon tile
+   ========================================================================== */
+.card.locked .card-art {
+  filter: saturate(0.35) brightness(0.55);
+}
+
+.card.locked .card-art::after {
+  content: "COMING SOON";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(10px, 2.4vw, 13px);
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.card.locked:hover {
+  border-color: var(--surface-border);
+  transform: none;
+}
+
+/* ==========================================================================
+   Tap animations
+   ========================================================================== */
+@keyframes card-pop {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(0.97); }
+}
+
+@keyframes card-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
+.card.tapped { animation: card-pop 200ms ease-out; pointer-events: none; }
+.card.shake  { animation: card-shake 350ms ease-in-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card.tapped, .card.shake { animation: none; }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.footbar {
+  flex-shrink: 0;
+  padding: 12px 20px;
+  border-top: 1px solid var(--surface-border);
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+/* ==========================================================================
+   Game-in-iframe overlay (morph) — keeps existing behavior, restyled
+   skin to match the new card design (no gradient).
+   ========================================================================== */
+.game-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.game-overlay[data-state="open"] { pointer-events: auto; }
+.game-overlay[data-state="shrinking"] { pointer-events: none; }
+
+.frame-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, border-radius;
+}
+
+#game-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+  display: block;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+#game-frame.visible { opacity: 1; }
+
+.frame-skin {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.frame-skin.visible { opacity: 1; }
+
+.skin-art {
+  flex: 7;
+  background: var(--g1, var(--accent));
+  display: grid;
+  place-items: center;
+}
+
+.skin-icon {
+  font-size: clamp(56px, 14vw, 130px);
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
+}
+
+.skin-body {
+  flex: 3;
+  padding: clamp(12px, 3vw, 28px) clamp(14px, 4vw, 36px);
+  background: var(--surface);
+  border-top: 1px solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(2px, 0.5vw, 6px);
+}
+
+.skin-title {
+  margin: 0;
+  font-size: clamp(18px, 5vw, 40px);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.skin-tagline {
+  margin: 0;
+  font-size: clamp(11px, 2.6vw, 22px);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame-wrap { transition: transform 0.15s ease, border-radius 0.15s ease; }
+  .frame-skin, #game-frame { transition: opacity 0.1s ease; }
+}
+
+/* ==========================================================================
+   Compact mobile
+   ========================================================================== */
+@media (max-width: 380px) {
+  .topbar { padding: 14px 16px; }
+  .page { padding: 18px 16px 0; }
+  .footbar { padding: 10px 16px; }
+  .card-title { font-size: 12px; }
+  .card-meta { font-size: 9px; }
+  .card-body { padding: 10px 12px; }
+}
