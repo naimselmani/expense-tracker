@@ -201,7 +201,10 @@ if (existsSync(EXPENSES_DIR)) {
     }
   }
 } else {
-  fail('data/expenses', 'directory does not exist');
+  // A ledger with no expenses yet is a valid state — a fresh project set
+  // before the first bill is posted. Git cannot track the empty directory,
+  // so its absence must not fail the build; the aggregate is simply empty.
+  console.warn('data/expenses/ does not exist yet — building an empty ledger.');
 }
 
 checkDuplicates(records);
