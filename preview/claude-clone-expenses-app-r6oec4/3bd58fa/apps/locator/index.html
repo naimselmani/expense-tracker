@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Locator</title>
+  <script>
+    if (window.self !== window.top) document.documentElement.classList.add('embedded');
+    // Pick the theme BEFORE first paint so the loader matches.
+    // Order: localStorage > system preference > dark.
+    (function () {
+      try {
+        var t = localStorage.getItem('locator-theme');
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = t;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'dark';
+      }
+    })();
+  </script>
+  <style>
+    /* Critical inline CSS so the loading screen paints on the first
+       frame, before styles.css and MapLibre have resolved. Two
+       palettes; the data-theme attribute (set just above) decides. */
+    html, body { margin: 0; padding: 0; background: #1a1d24; color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif; }
+    html[data-theme="light"], html[data-theme="light"] body {
+      background: #f5f3ee; color: #1a1d24;
+    }
+    #app-loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: inherit;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 22px;
+      transition: opacity 0.4s ease;
+    }
+    #app-loading.hidden { opacity: 0; pointer-events: none; }
+    #app-loading .gl-icon { font-size: 88px; line-height: 1; }
+    #app-loading .gl-bar {
+      position: relative; width: 180px; height: 3px;
+      background: rgba(255, 255, 255, 0.18); overflow: hidden;
+    }
+    html[data-theme="light"] #app-loading .gl-bar { background: rgba(0, 0, 0, 0.12); }
+    #app-loading .gl-bar::after {
+      content: ""; position: absolute; top: 0; left: -40%;
+      width: 40%; height: 100%; background: #fb923c;
+      animation: gl-bar 1.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+    @keyframes gl-bar { 0% { left: -40%; } 100% { left: 100%; } }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+  <link rel="stylesheet" href="styles.css?v=3bd58fa" />
+</head>
+<body>
+  <div id="app-loading">
+    <span class="gl-icon" aria-hidden="true">📍</span>
+    <div class="gl-bar" aria-label="Loading"></div>
+  </div>
+
+  <main class="locator">
+    <div id="map" aria-label="Map of your location"></div>
+
+    <div class="hud-top">
+      <div class="status" id="status" data-state="waiting">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span class="status-text" id="status-text">Waiting…</span>
+      </div>
+      <div class="meta">
+        <span class="meta-item" id="meta-acc">—</span>
+        <span class="meta-sep" aria-hidden="true">·</span>
+        <span class="meta-item" id="meta-time">—</span>
+      </div>
+    </div>
+
+    <div class="hud-bottom">
+      <button id="retry-btn"  type="button" class="hud-btn primary" hidden>Locate me</button>
+      <button id="follow-btn" type="button" class="hud-btn" aria-pressed="true">Follow</button>
+      <div class="layers-popover-wrap">
+        <button id="layers-btn" type="button" class="hud-btn" aria-expanded="false" aria-controls="layers-popover">Layers</button>
+        <div id="layers-popover" class="layers-popover" role="dialog" aria-label="Map layers" hidden>
+          <ul id="layers-list" class="layers-list"></ul>
+        </div>
+      </div>
+      <button id="profile-btn" type="button" class="hud-btn" aria-haspopup="dialog" aria-controls="profile-sheet"><span class="profile-btn-emoji" aria-hidden="true">📍</span><span class="profile-btn-label">Profile</span></button>
+      <button id="theme-btn"  type="button" class="hud-btn" aria-label="Toggle light/dark theme">Light</button>
+      <button id="debug-btn"  type="button" class="hud-btn ghost" hidden aria-label="Open debug console">Debug</button>
+      <button id="quit-btn"   type="button" class="hud-btn ghost">Quit</button>
+    </div>
+
+    <div id="profile-sheet" class="profile-sheet" hidden role="dialog" aria-label="POI profile">
+      <div class="profile-sheet-head">
+        <span class="profile-sheet-title">Profile</span>
+        <button id="profile-close" class="profile-close" type="button" aria-label="Close">×</button>
+      </div>
+      <p class="profile-sheet-sub">Pick how the map shows points of interest.</p>
+      <div id="profile-list" class="profile-list" role="radiogroup" aria-label="Profile"></div>
+    </div>
+
+    <div id="debug-sheet" class="debug-sheet" hidden role="dialog" aria-label="Debug console">
+      <div class="debug-head">
+        <span class="debug-title">Debug</span>
+        <button id="debug-close" class="debug-close" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="debug-section">
+        <div class="debug-section-head">
+          <span>Per-layer min zoom override</span>
+          <button id="debug-zoom-reset" type="button" class="hud-btn ghost">Reset</button>
+        </div>
+        <ul id="debug-zoom-list" class="debug-zoom-list"></ul>
+      </div>
+      <pre id="debug-log" class="debug-log"></pre>
+      <div class="debug-actions">
+        <button id="debug-copy"  type="button" class="hud-btn">Copy</button>
+        <button id="debug-share" type="button" class="hud-btn">Share</button>
+        <button id="debug-clear" type="button" class="hud-btn ghost">Clear</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/pmtiles@3.2.1/dist/pmtiles.js"></script>
+  <script src="https://unpkg.com/supercluster@8.0.1/dist/supercluster.min.js"></script>
+  <script src="app.js?v=3bd58fa"></script>
+</body>
+</html>

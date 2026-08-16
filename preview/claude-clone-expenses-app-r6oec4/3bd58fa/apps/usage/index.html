@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#262624" media="(prefers-color-scheme: dark)">
+<title>Claude Usage</title>
+<script>
+  if (window.self !== window.top) document.documentElement.classList.add('embedded');
+  // Template pre-paint: ?template=classic pins it (handy for kiosk/mini
+  // devices), otherwise the last picked one from localStorage, otherwise
+  // oled. "classic" = no attribute. OLED boots in minimal (.min) mode.
+  (function () {
+    var valid = ['classic', 'oled'];
+    var t = new URLSearchParams(location.search).get('template');
+    if (valid.indexOf(t) !== -1) {
+      try { localStorage.setItem('usage-template', t); } catch (e) {}
+    } else {
+      try { t = localStorage.getItem('usage-template'); } catch (e) { t = null; }
+    }
+    if (valid.indexOf(t) === -1) t = 'oled';
+    if (t !== 'classic') document.documentElement.dataset.template = t;
+    if (t === 'oled') document.documentElement.classList.add('min');
+  })();
+</script>
+<style>
+  /* Claude-themed chrome: ivory page, warm ink, terracotta accent.
+     The meter fills are the reserved status scale (never themed):
+     resting is a warm neutral clay; warning/serious/critical are the
+     fixed status steps, always paired with the status word + dot. */
+  :root {
+    --page: #faf9f5; --ink: #1a1915; --ink2: #57534a; --muted: #6f6b60;
+    --track: #eae6dc; --hairline: #e4e0d5; --accent: #c15f3c;
+    --rest: #57534a; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #262624; --ink: #f0eee6; --ink2: #c9c4b6; --muted: #a3a094;
+      --track: #3a3833; --hairline: #3a3833; --accent: #d97757;
+      --rest: #c9c4b6;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; min-height: 100vh; background: var(--page); color: var(--ink);
+    font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: clamp(28px, 8vh, 64px) 0 32px;
+  }
+  main {
+    max-width: 560px; margin: 0 auto;
+    padding-left: max(clamp(20px, 6vw, 36px), env(safe-area-inset-left));
+    padding-right: max(clamp(20px, 6vw, 36px), env(safe-area-inset-right));
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-bottom: 30px; }
+  h1 {
+    margin: 0; display: flex; align-items: center; gap: 10px;
+    font: 500 clamp(22px, 5.5vw, 26px)/1.2 ui-serif, Georgia, "Times New Roman", serif;
+    letter-spacing: .01em;
+  }
+  h1 svg { width: .8em; height: .8em; color: var(--accent); flex: none; }
+  .stamp { margin-left: auto; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  #quit {
+    appearance: none; border: 1px solid var(--hairline); background: none;
+    color: var(--ink2); font: inherit; font-size: 13px; line-height: 1;
+    padding: 6px 12px; border-radius: 999px; cursor: pointer; align-self: center;
+  }
+  #quit:hover { color: var(--ink); border-color: var(--muted); }
+  .banner {
+    display: none; border-left: 3px solid var(--warning); padding: 8px 14px;
+    font-size: 14px; color: var(--ink2); margin-bottom: 26px;
+  }
+  .banner.stale { display: block; }
+  .banner.error { display: block; border-left-color: var(--critical); }
+
+  .meter { margin-bottom: 30px; }
+  .meter-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  .meter-label { font-size: 15px; color: var(--ink); min-width: 0; }
+  .meter-value { font-size: 16px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  /* thin mark, 4px rounded data-end, square at the baseline (track clips it);
+     the track tints toward the fill's own hue so state reads across the bar */
+  .track {
+    position: relative; height: 10px; border-radius: 5px; overflow: hidden;
+    background: var(--track);
+    background: color-mix(in srgb, var(--fill, var(--rest)) 12%, var(--page));
+  }
+  .fill {
+    position: absolute; inset: 0 auto 0 0; min-width: 4px;
+    border-radius: 0 4px 4px 0; background: var(--fill, var(--rest));
+    transition: width .5s ease;
+  }
+  .tick { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--muted); opacity: .4; }
+  .meter-sub { display: flex; justify-content: space-between; gap: 12px; margin-top: 7px; font-size: 13px; color: var(--muted); }
+  .status-word { display: inline-flex; align-items: center; gap: 6px; color: var(--ink2); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fill, var(--rest)); }
+
+  .money { font-size: 14px; color: var(--ink2); border-top: 1px solid var(--hairline); padding-top: 16px; }
+  footer { margin-top: 40px; font-size: 12px; color: var(--muted); }
+  .skeleton .track { opacity: .5; }
+  noscript { display: block; padding: 20px 0; color: var(--ink2); }
+  @media (prefers-reduced-motion: reduce) { .fill { transition: none; } }
+
+  .templates { margin-top: 10px; display: flex; gap: 12px; }
+  .templates button {
+    appearance: none; border: 0; background: none; padding: 0; cursor: pointer;
+    font: inherit; font-size: 12px; color: var(--muted);
+  }
+  .templates button:hover { color: var(--ink2); }
+  .templates button[aria-pressed="true"] { color: var(--accent); }
+
+  /* --- Templates ---------------------------------------------------------
+     html[data-template=...] outranks the :root defaults (and the dark-mode
+     media query), so the template wins in both color schemes. */
+
+  /* OLED: true-black page (pixels fully off), everything Claude orange,
+     hairline-thin bars. Boots in minimal mode. */
+  html[data-template="oled"] {
+    --page: #000; --ink: #d97757; --ink2: #8f8a7e; --muted: #5c584f;
+    --track: #141414; --hairline: #1b1b1b; --accent: #d97757; --rest: #d97757;
+  }
+  html[data-template="oled"] .track { height: 4px; border-radius: 2px; background: #141414; }
+  html[data-template="oled"] .fill { border-radius: 0 2px 2px 0; min-width: 2px; background: #d97757; }
+  html[data-template="oled"] .tick { display: none; }
+  html[data-template="oled"] .status-dot { width: 6px; height: 6px; }
+
+  /* Minimal mode (.min), any template: only labels + sliders, centered.
+     Tapping anywhere (not on a control) toggles it. */
+  html.min header,
+  html.min .banner,
+  html.min .meter-value,
+  html.min .meter-sub,
+  html.min .money,
+  html.min footer { display: none; }
+  html.min body { display: flex; align-items: center; padding: 24px 0; }
+  html.min main { width: 100%; }
+  html.min .meter:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5 13.9 8.3 19.4 4.6 15.7 10.1 22.5 12 15.7 13.9 19.4 19.4 13.9 15.7 12 22.5 10.1 15.7 4.6 19.4 8.3 13.9 1.5 12 8.3 10.1 4.6 4.6 10.1 8.3Z"/></svg>
+        Claude usage
+      </h1>
+      <span class="stamp" id="stamp">loading…</span>
+      <button id="quit" type="button" aria-label="Quit">✕ Quit</button>
+    </header>
+    <div class="banner" id="banner" role="status" aria-live="polite"></div>
+    <div id="meters" class="skeleton">
+      <div class="meter"><div class="meter-top"><span class="meter-label">&nbsp;</span></div><div class="track"></div></div>
+      <div class="meter"><div class="meter-top"><span class="meter-label">&nbsp;</span></div><div class="track"></div></div>
+    </div>
+    <div class="money" id="money" hidden></div>
+    <footer>
+      one shared pool: claude.ai · Claude Code · artifacts
+      <nav class="templates" id="templates" aria-label="Template">
+        <button type="button" data-template="classic">classic</button>
+        <button type="button" data-template="oled">oled</button>
+      </nav>
+    </footer>
+    <noscript>This page needs JavaScript to fetch the usage feed.</noscript>
+  </main>
+<script>
+  // Fed by the ClaudeUsagePublish scheduled task running publish-usage.ps1
+  // (or claude-usage-watch.js --publish) — see the claude-usage-tools repo.
+  const FEED = "https://gist.githubusercontent.com/xhevops/4c03f1dcb612bb2f243f7c53b9858d0a/raw/usage.json";
+  const REFRESH_MS = 60000;
+  const STALE_MS = 15 * 60000; // publisher runs every 5 min; gist CDN caches ~5 min
+
+  const $ = (id) => document.getElementById(id);
+
+  // thresholds match the watcher's notify levels and the 75/90 track ticks;
+  // resting state wears the neutral clay fill, not a status color
+  function status(pct, severity) {
+    if (severity && severity !== "normal") return { color: "var(--critical)", word: severity };
+    if (pct >= 90) return { color: "var(--critical)", word: "critical" };
+    if (pct >= 75) return { color: "var(--serious)", word: "high" };
+    if (pct >= 60) return { color: "var(--warning)", word: "elevated" };
+    return { color: "var(--rest)", word: "" };
+  }
+
+  function timeLeft(iso) {
+    if (!iso) return "";
+    const ms = new Date(iso).getTime() - Date.now();
+    if (isNaN(ms)) return "";
+    if (ms <= 0) return "resetting…";
+    const d = Math.floor(ms / 86400000);
+    const h = Math.floor((ms % 86400000) / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    return d > 0 ? `resets in ${d}d ${h}h` : h > 0 ? `resets in ${h}h ${m}m` : `resets in ${m}m`;
+  }
+
+  function ago(iso) {
+    const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+    if (isNaN(s)) return "";
+    if (s < 60) return "updated just now"; // negative = clock skew, treat as fresh
+    if (s < 3600) return `updated ${Math.floor(s / 60)}m ago`;
+    return `updated ${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m ago`;
+  }
+
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  let data = null;
+  let fetchError = null;
+
+  function bars() {
+    // never trust the feed shape — skip anything without a finite percent
+    return (Array.isArray(data?.bars) ? data.bars : []).filter((b) => b && Number.isFinite(b.percent));
+  }
+
+  function draw() {
+    if (!data) return;
+    const box = $("meters");
+    box.classList.remove("skeleton");
+    box.replaceChildren();
+    for (const b of bars()) {
+      const pct = Math.round(b.percent);
+      const st = status(pct, b.severity);
+      const meter = el("div", "meter");
+      meter.style.setProperty("--fill", st.color);
+
+      const top = el("div", "meter-top");
+      top.append(el("span", "meter-label", b.label), el("span", "meter-value", pct + "%"));
+      meter.append(top);
+
+      const track = el("div", "track");
+      track.setAttribute("role", "meter");
+      track.setAttribute("aria-valuemin", "0");
+      track.setAttribute("aria-valuemax", "100");
+      track.setAttribute("aria-valuenow", String(pct));
+      track.setAttribute("aria-label", b.label + ": " + pct + "%" + (st.word ? " (" + st.word + ")" : ""));
+      for (const t of [75, 90]) {
+        const tick = el("div", "tick");
+        tick.style.left = t + "%";
+        track.append(tick);
+      }
+      const fill = el("div", "fill");
+      fill.style.width = Math.min(100, Math.max(0, pct)) + "%";
+      track.append(fill);
+      meter.append(track);
+
+      const sub = el("div", "meter-sub");
+      sub.append(el("span", "", timeLeft(b.resets_at)));
+      if (st.word) {
+        const sw = el("span", "status-word");
+        sw.append(el("span", "status-dot"), document.createTextNode(st.word));
+        sub.append(sw);
+      }
+      meter.append(sub);
+      if (b.resets_at && !isNaN(new Date(b.resets_at))) {
+        meter.title = "resets " + new Date(b.resets_at).toLocaleString();
+      }
+      box.append(meter);
+    }
+    if (!bars().length) box.append(el("div", "meter", "no usage windows in the feed"));
+
+    const m = data.money;
+    $("money").hidden = !(m && m.usedText);
+    if (m && m.usedText) $("money").textContent = `extra usage: ${m.usedText}${m.limitText ? " of " + m.limitText : ""} this month`;
+
+    $("stamp").textContent = data.updated ? ago(data.updated) : "no data yet";
+    updateBanner();
+  }
+
+  function updateBanner() {
+    const banner = $("banner");
+    if (fetchError) {
+      banner.className = "banner error";
+      banner.textContent = "Couldn't load the feed (" + fetchError + "). Retrying…";
+      return;
+    }
+    if (!data) return;
+    const stale = data.updated && Date.now() - new Date(data.updated).getTime() > STALE_MS;
+    if (stale) {
+      banner.className = "banner stale";
+      banner.textContent = "Feed is stale — the publisher isn't running. Check the ClaudeUsagePublish scheduled task (publish-usage.ps1).";
+    } else if (!data.updated) {
+      banner.className = "banner stale";
+      banner.textContent = "Waiting for first publish. Run publish-usage.ps1 once to seed the feed.";
+    } else {
+      banner.className = "banner";
+      banner.textContent = "";
+    }
+  }
+
+  async function load() {
+    try {
+      const res = await fetch(FEED + "?t=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      data = await res.json();
+      fetchError = null;
+      draw();
+    } catch (e) {
+      fetchError = e.message; // sticky until the next successful load
+      updateBanner();
+    }
+  }
+
+  const TEMPLATES = ["classic", "oled"];
+
+  function currentTemplate() {
+    return document.documentElement.dataset.template || "classic";
+  }
+
+  function markTemplatePicker() {
+    for (const btn of $("templates").querySelectorAll("button")) {
+      btn.setAttribute("aria-pressed", String(btn.dataset.template === currentTemplate()));
+    }
+  }
+
+  $("templates").addEventListener("click", (ev) => {
+    const t = ev.target.dataset && ev.target.dataset.template;
+    if (!TEMPLATES.includes(t)) return;
+    if (t === "classic") delete document.documentElement.dataset.template;
+    else document.documentElement.dataset.template = t;
+    // each template returns to its default mode: oled minimal, classic full
+    document.documentElement.classList.toggle("min", t === "oled");
+    try { localStorage.setItem("usage-template", t); } catch (e) {}
+    markTemplatePicker();
+  });
+  markTemplatePicker();
+
+  // Tapping anywhere (not on a control) toggles minimal mode — labels and
+  // sliders only. Works in both templates; tap again for the full UI.
+  document.addEventListener("click", (ev) => {
+    if (ev.target.closest("button, a")) return;
+    document.documentElement.classList.toggle("min");
+  });
+
+  $("quit").addEventListener("click", () => {
+    if (window.self !== window.top) {
+      try { window.parent.postMessage({ type: "close-game" }, "*"); } catch (e) {}
+    } else {
+      location.href = "../../";
+    }
+  });
+
+  load();
+  setInterval(load, REFRESH_MS);
+  setInterval(draw, 10000); // keep "ago" / countdowns ticking between fetches
+</script>
+</body>
+</html>
