@@ -1,0 +1,22 @@
+[
+  {
+    "id": "hotel",
+    "name": "Hotel",
+    "icon": "🏨"
+  },
+  {
+    "id": "skopje-k-voda",
+    "name": "Skopje k voda",
+    "icon": "💧"
+  },
+  {
+    "id": "crniche",
+    "name": "Crniche",
+    "icon": "🏗️"
+  },
+  {
+    "id": "krnjevo",
+    "name": "Krnjevo",
+    "icon": "🏠"
+  }
+]
