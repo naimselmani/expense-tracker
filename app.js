@@ -310,6 +310,87 @@
     `).join('') : '<div class="empty">Nothing yet.</div>';
 
     $('recent-list').innerHTML = expenseListHtml(newestFirst(visibleExpenses()).slice(0, 5));
+    renderContract();
+  }
+
+  // ---- Contract card: land-contract detail for projects that carry one ----
+
+  // Lowercase slug for a status/risk/signed value so it can drive a CSS class.
+  function tokenOf(s) {
+    return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+
+  function factRow(label, value) {
+    if (value === undefined || value === null || value === '') return '';
+    return `<dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd>`;
+  }
+
+  function noteBlock(label, value) {
+    if (!value) return '';
+    return `
+      <div class="ct-note">
+        <div class="ct-note-label">${escapeHTML(label)}</div>
+        <p class="ct-note-text">${escapeHTML(value)}</p>
+      </div>`;
+  }
+
+  function renderContract() {
+    const block = $('contract-block');
+    // The combined view spans every project, so there is no single contract.
+    const proj = showingAllProjects() ? null : projectOf(currentProject);
+    const c = proj && proj.contract;
+    if (!c) {
+      block.hidden = true;
+      $('contract-card').innerHTML = '';
+      return;
+    }
+    block.hidden = false;
+
+    // Parcels sit on the project, alongside the contract summary. Owner
+    // identities are deliberately not carried in the ledger — only a count.
+    const parcels = Array.isArray(proj.parcels) ? proj.parcels : [];
+
+    $('contract-card').innerHTML = `
+      <div class="ct-head">
+        <div class="ct-head-main">
+          <div class="ct-ref">${escapeHTML(c.reference || '')}</div>
+          ${c.totalAreaM2 ? `<div class="ct-area">${escapeHTML(String(c.totalAreaM2))} m²</div>` : ''}
+        </div>
+        <div class="ct-badges">
+          ${c.status ? `<span class="ct-badge st-${escapeHTML(tokenOf(c.status))}">${escapeHTML(c.status)}</span>` : ''}
+          ${c.risk ? `<span class="ct-badge rk-${escapeHTML(tokenOf(c.risk))}">${escapeHTML(c.risk)} risk</span>` : ''}
+        </div>
+      </div>
+
+      ${c.issueFlag ? `<div class="ct-flag">⚑ ${escapeHTML(c.issueFlag)}</div>` : ''}
+
+      <dl class="ct-facts">
+        ${factRow('Location', c.location)}
+        ${factRow('Cadastral municipality', c.municipality)}
+        ${factRow('Investor', c.investor)}
+        ${factRow('Owners', c.ownersCount)}
+        ${factRow('Last updated', c.lastUpdated)}
+      </dl>
+
+      ${parcels.length ? `
+        <div class="ct-section-label">Parcels · ${parcels.length}</div>
+        <div class="ct-list">
+          ${parcels.map((p) => `
+            <div class="ct-row">
+              <div class="ct-row-main">
+                <div class="ct-row-name">Parcel ${escapeHTML(p.parcelNo || '—')}${p.imotenList ? ` · list ${escapeHTML(p.imotenList)}` : ''}</div>
+                <div class="ct-row-sub">${escapeHTML([p.landDescription, p.right, p.areaBreakdown].filter(Boolean).join(' · '))}</div>
+              </div>
+              <div class="ct-row-right">
+                ${p.areaM2 ? `<div class="ct-share">${escapeHTML(String(p.areaM2))} m²</div>` : ''}
+              </div>
+            </div>`).join('')}
+        </div>` : ''}
+
+      ${noteBlock('Issues', c.issues)}
+      ${noteBlock('Next action', c.nextAction)}
+      ${noteBlock('Notes', c.notes)}
+    `;
   }
 
   // ---- Expenses view: period scope, skip-empty navigation, grouping ----

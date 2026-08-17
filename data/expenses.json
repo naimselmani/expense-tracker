@@ -4,7 +4,7 @@
     "fixedRates": {
       "MKD": 61.5
     },
-    "updated": "2026-08-17T13:03:54.216Z"
+    "updated": "2026-08-17T13:31:59.296Z"
   },
   "projects": [
     {
@@ -30,37 +30,253 @@
     {
       "id": "vlae-1",
       "name": "Vlae Project Nr. 1",
-      "icon": "🏢"
+      "icon": "🏢",
+      "contract": {
+        "reference": "C-001",
+        "contractNo": 1,
+        "location": "Vlae",
+        "municipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Medium",
+        "issueFlag": "Needs review",
+        "totalAreaM2": 642,
+        "ownersCount": 3,
+        "lastUpdated": "2026-07-31",
+        "issues": "Republic of Macedonia has a 35/642 share. Delukse Home is already listed with 50/642. Verify whether the state share affects the contract, ownership transfer, construction rights and compensation model.",
+        "nextAction": "Check contract signatures, the legal treatment of the Republic of Macedonia share, and whether the Delukse Home share is already properly registered.",
+        "notes": "Land includes 496 m² construction built land and 146 m² land under building."
+      },
+      "parcels": [
+        {
+          "imotenList": "101841",
+          "parcelNo": "7503",
+          "cadastralMunicipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+          "areaM2": 642,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда",
+          "right": "Сопственост",
+          "areaBreakdown": "496 m² construction built land; 146 m² land under building"
+        }
+      ]
     },
     {
       "id": "vlae-2",
       "name": "Vlae Project Nr. 2",
-      "icon": "🏢"
+      "icon": "🏢",
+      "contract": {
+        "reference": "C-002",
+        "contractNo": 2,
+        "location": "Vlae",
+        "municipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Low",
+        "issueFlag": "No visible ownership issue",
+        "totalAreaM2": 284,
+        "ownersCount": 1,
+        "lastUpdated": "2026-06-11",
+        "issues": "No visible ownership issue from the extract. Contract signature and notarization still need confirmation.",
+        "nextAction": "Confirm that the land owner signed the contract and that no extra encumbrances exist in the full imoten list extract.",
+        "notes": "Single owner shown as 1/1. Land type shown as construction built land."
+      },
+      "parcels": [
+        {
+          "imotenList": "104812",
+          "parcelNo": "7507/1",
+          "cadastralMunicipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+          "areaM2": 284,
+          "landDescription": "ГИЗ градежно изградено земјиште",
+          "right": "Сопственост",
+          "areaBreakdown": "284 m² construction built land"
+        }
+      ]
     },
     {
       "id": "vlae-3",
       "name": "Vlae Project Nr. 3",
-      "icon": "🏢"
+      "icon": "🏢",
+      "contract": {
+        "reference": "C-003",
+        "contractNo": 3,
+        "location": "Vlae",
+        "municipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "High",
+        "issueFlag": "State ownership share",
+        "totalAreaM2": 176,
+        "ownersCount": 2,
+        "lastUpdated": "2026-06-11",
+        "issues": "Republic of Macedonia owns 83/176. This is a large state share and must be checked before treating the contract as clean.",
+        "nextAction": "Verify whether the state share can be acquired, compensated, consolidated or excluded from the project documentation.",
+        "notes": "Same land owner as Project Nr. 1, but another imoten list and another parcel. Land type shown as Н Нива."
+      },
+      "parcels": [
+        {
+          "imotenList": "101308",
+          "parcelNo": "7515",
+          "cadastralMunicipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+          "areaM2": 176,
+          "landDescription": "Н Нива",
+          "right": "Сопственост",
+          "areaBreakdown": "176 m²"
+        }
+      ]
     },
     {
       "id": "kisela-voda-4",
       "name": "Kisela Voda Project Nr. 4",
-      "icon": "🏘️"
+      "icon": "🏘️",
+      "contract": {
+        "reference": "C-004",
+        "contractNo": 4,
+        "location": "Kisela Voda",
+        "municipality": "КИСЕЛА ВОДА 1 - СКОПЈЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Partially signed",
+        "risk": "High",
+        "issueFlag": "Missing signature",
+        "totalAreaM2": 286,
+        "ownersCount": 3,
+        "lastUpdated": "2026-06-11",
+        "issues": "Two of the three owners have signed this contract; the third has not signed yet. The extract shows one listed rights holder, so the contract parties must be compared against the actual contract.",
+        "nextAction": "Identify the third owner from the contract file and collect the missing signature before treating the contract as complete.",
+        "notes": "Two parcels under one imoten list. Both shown as construction unbuilt land."
+      },
+      "parcels": [
+        {
+          "imotenList": "38367",
+          "parcelNo": "865/3",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 12,
+          "landDescription": "ГНЗ градежно неизградено земјиште",
+          "right": "Сопственост",
+          "areaBreakdown": "12 m²"
+        },
+        {
+          "imotenList": "38367",
+          "parcelNo": "865/4",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 274,
+          "landDescription": "ГНЗ градежно неизградено земјиште",
+          "right": "Сопственост",
+          "areaBreakdown": "274 m²"
+        }
+      ]
     },
     {
       "id": "kisela-voda-5",
       "name": "Kisela Voda Project Nr. 5",
-      "icon": "🏘️"
+      "icon": "🏘️",
+      "contract": {
+        "reference": "C-005",
+        "contractNo": 5,
+        "location": "Kisela Voda",
+        "municipality": "КИСЕЛА ВОДА 1 - СКОПЈЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Medium",
+        "issueFlag": "Multiple imoten lists",
+        "totalAreaM2": 1972,
+        "ownersCount": 4,
+        "lastUpdated": "2026-06-11",
+        "issues": "Two imoten lists are covered by one contract. All co-owners from imoten list 5881 and the owner from imoten list 57018 should be checked against the signatures.",
+        "nextAction": "Confirm signatures for all four co-owners across both imoten lists, and confirm both lists are properly included in the same contract.",
+        "notes": "Contract contains parcel 1708 with 1230 m² and parcel 1707 with 742 m². Total combined area 1972 m²."
+      },
+      "parcels": [
+        {
+          "imotenList": "5881",
+          "parcelNo": "1708",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 1230,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда/објект",
+          "right": "Сопственост",
+          "areaBreakdown": "1027 m² construction built land; 145 m² land under building; 58 m² land under object"
+        },
+        {
+          "imotenList": "57018",
+          "parcelNo": "1707",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 742,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда/објект",
+          "right": "Сопственост",
+          "areaBreakdown": "619 m² construction built land; 112 m² land under building; 11 m² land under object"
+        }
+      ]
     },
     {
       "id": "kisela-voda-6",
       "name": "Kisela Voda Project Nr. 6",
-      "icon": "🏘️"
+      "icon": "🏘️",
+      "contract": {
+        "reference": "C-006",
+        "contractNo": 6,
+        "location": "Kisela Voda",
+        "municipality": "КИСЕЛА ВОДА 1 - СКОПЈЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Medium",
+        "issueFlag": "Two owners",
+        "totalAreaM2": 291,
+        "ownersCount": 2,
+        "lastUpdated": "2026-06-11",
+        "issues": "Both 1/2 owners must be confirmed as signatories to the contract.",
+        "nextAction": "Confirm signatures and compare the contract parties with the imoten list owners.",
+        "notes": "Parcel address shown as Ul. Drenak br. 3A."
+      },
+      "parcels": [
+        {
+          "imotenList": "58013",
+          "parcelNo": "198",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 291,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда",
+          "right": "Сопственост",
+          "areaBreakdown": "178 m² construction built land; 54 m² land under building; 59 m² land under building"
+        }
+      ]
     },
     {
       "id": "centar-7",
       "name": "Centar Project Nr. 7",
-      "icon": "🏙️"
+      "icon": "🏙️",
+      "contract": {
+        "reference": "C-007",
+        "contractNo": 7,
+        "location": "Centar",
+        "municipality": "ЦЕНТАР 1 - СКОПЈЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Medium",
+        "issueFlag": "Two imoten lists",
+        "totalAreaM2": 464,
+        "ownersCount": 2,
+        "lastUpdated": "2026-07-21",
+        "issues": "Two imoten lists are covered by one contract. Both owners appear as 1/1 on their respective parcels; signatures need confirmation.",
+        "nextAction": "Confirm that both land owners signed the contract and check any object or encumbrance details from the full imoten list.",
+        "notes": "The source extracts show object sections, but they are partially cropped. Use the source documents for complete object details."
+      },
+      "parcels": [
+        {
+          "imotenList": "96473",
+          "parcelNo": "8396/1",
+          "cadastralMunicipality": "ЦЕНТАР 1",
+          "areaM2": 219,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда",
+          "right": "Сопственост",
+          "areaBreakdown": "97 m² construction built land; 15 m² land under building; 107 m² land under building"
+        },
+        {
+          "imotenList": "5899",
+          "parcelNo": "8396/2",
+          "cadastralMunicipality": "ЦЕНТАР 1",
+          "areaM2": 245,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда",
+          "right": "Сопственост",
+          "areaBreakdown": "105 m² construction built land; 32 m² land under building; 108 m² land under building"
+        }
+      ]
     }
   ],
   "categories": [
