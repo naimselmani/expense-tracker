@@ -20,11 +20,20 @@
   let data = null;
   let categoriesById = {};
   // One project at a time; the header picker switches, remembered locally.
+  // The ALL_PROJECTS sentinel drops the filter so every view shows the
+  // combined ledger. It is never a real project id (ids are lowercase slugs).
   const PROJECT_KEY = 'expenses-project';
+  const ALL_PROJECTS = '__all__';
   let currentProject = null;
 
+  function showingAllProjects() {
+    return currentProject === ALL_PROJECTS;
+  }
+
   function visibleExpenses() {
-    return data.expenses.filter((e) => e.project === currentProject);
+    return showingAllProjects()
+      ? data.expenses
+      : data.expenses.filter((e) => e.project === currentProject);
   }
 
   // Expenses view: period scope + grouping + free-text search, cursors UTC.
@@ -244,7 +253,7 @@
           <span class="exp-icon" aria-hidden="true">${escapeHTML(icon)}</span>
           <div class="exp-main">
             <div class="exp-vendor">${escapeHTML(e.vendor)}</div>
-            <div class="exp-sub">${escapeHTML(catName)}${e.description ? ' · ' + escapeHTML(e.description) : ''}</div>
+            <div class="exp-sub">${showingAllProjects() ? `<span class="exp-proj">${escapeHTML(projectLabel(e.project))}</span> · ` : ''}${escapeHTML(catName)}${e.description ? ' · ' + escapeHTML(e.description) : ''}</div>
             ${textMatchIds.has(e.id) ? '<div class="exp-hit">📎 matches document text</div>' : ''}
           </div>
           <div class="exp-right">
@@ -891,10 +900,19 @@
     return data.projects.find((p) => p.id === id);
   }
 
+  // Display name for an expense's project. Falls back to the raw id so a row
+  // stays readable if its project were ever dropped from the registry.
+  function projectLabel(id) {
+    const p = projectOf(id);
+    return p ? p.name : id;
+  }
+
   // Re-render everything against the current project.
   function applyProject() {
     const proj = projectOf(currentProject);
-    $('project-name').textContent = proj ? proj.name : 'Expenses';
+    $('project-name').textContent = showingAllProjects()
+      ? 'All projects'
+      : (proj ? proj.name : 'Expenses');
 
     // Snap the reports year to the newest year that has data here.
     const years = yearsWithData();
@@ -902,8 +920,11 @@
       reportYear = Number(years[years.length - 1]);
     }
 
+    const scope = showingAllProjects()
+      ? `across ${data.projects.length} projects`
+      : 'in this project';
     $('foot-note').textContent =
-      `${visibleExpenses().length} expenses in this project · updated via Claude Code sessions · MKD pegged at ${data.meta.fixedRates.MKD} per EUR`;
+      `${visibleExpenses().length} expenses ${scope} · updated via Claude Code sessions · MKD pegged at ${data.meta.fixedRates.MKD} per EUR`;
 
     renderOverview();
     renderExpensesView();
@@ -911,7 +932,20 @@
   }
 
   function openPicker() {
-    $('picker-list').innerHTML = data.projects.map((p) => {
+    // "All projects" first, then each project. Same markup as a real entry so
+    // the existing click handler and styling apply unchanged.
+    const allActive = showingAllProjects();
+    const allItem = `
+        <button type="button" class="picker-item${allActive ? ' active' : ''}" data-project="${ALL_PROJECTS}">
+          <span class="picker-item-icon" aria-hidden="true">🗂️</span>
+          <span class="picker-item-body">
+            <span class="picker-item-name">All projects</span>
+            <span class="picker-item-meta">${data.expenses.length} expense${data.expenses.length === 1 ? '' : 's'} across ${data.projects.length} projects</span>
+          </span>
+          ${allActive ? '<span class="picker-item-check" aria-hidden="true">✓</span>' : ''}
+        </button>
+      `;
+    $('picker-list').innerHTML = allItem + data.projects.map((p) => {
       const count = data.expenses.filter((e) => e.project === p.id).length;
       const active = p.id === currentProject;
       return `
@@ -975,7 +1009,7 @@
       // Restore the remembered project, falling back to the first one.
       let saved = null;
       try { saved = localStorage.getItem(PROJECT_KEY); } catch (_) {}
-      currentProject = data.projects.some((p) => p.id === saved)
+      currentProject = (saved === ALL_PROJECTS || data.projects.some((p) => p.id === saved))
         ? saved
         : data.projects[0].id;
 

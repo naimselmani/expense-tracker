@@ -4,7 +4,7 @@
     "fixedRates": {
       "MKD": 61.5
     },
-    "updated": "2026-08-16T18:23:53.841Z"
+    "updated": "2026-08-17T13:03:54.216Z"
   },
   "projects": [
     {
@@ -26,6 +26,41 @@
       "id": "krnjevo",
       "name": "Krnjevo",
       "icon": "🏠"
+    },
+    {
+      "id": "vlae-1",
+      "name": "Vlae Project Nr. 1",
+      "icon": "🏢"
+    },
+    {
+      "id": "vlae-2",
+      "name": "Vlae Project Nr. 2",
+      "icon": "🏢"
+    },
+    {
+      "id": "vlae-3",
+      "name": "Vlae Project Nr. 3",
+      "icon": "🏢"
+    },
+    {
+      "id": "kisela-voda-4",
+      "name": "Kisela Voda Project Nr. 4",
+      "icon": "🏘️"
+    },
+    {
+      "id": "kisela-voda-5",
+      "name": "Kisela Voda Project Nr. 5",
+      "icon": "🏘️"
+    },
+    {
+      "id": "kisela-voda-6",
+      "name": "Kisela Voda Project Nr. 6",
+      "icon": "🏘️"
+    },
+    {
+      "id": "centar-7",
+      "name": "Centar Project Nr. 7",
+      "icon": "🏙️"
     }
   ],
   "categories": [
