@@ -4,7 +4,7 @@
     "fixedRates": {
       "MKD": 61.5
     },
-    "updated": "2026-08-17T14:10:52.576Z"
+    "updated": "2026-08-17T16:13:10.181Z"
   },
   "projects": [
     {
@@ -21,11 +21,6 @@
       "id": "crniche",
       "name": "Crniche",
       "icon": "🏗️"
-    },
-    {
-      "id": "krnjevo",
-      "name": "Krnjevo",
-      "icon": "🏠"
     },
     {
       "id": "vlae-1",
@@ -246,6 +241,9 @@
         "contractNo": 7,
         "location": "Centar",
         "municipality": "ЦЕНТАР 1 - СКОПЈЕ",
+        "dupLocality": "Крњево 2",
+        "buildingPlot": "ГП 5.3",
+        "building": "П+5+ПК",
         "investor": "Delukse Home DOO",
         "status": "Not confirmed",
         "risk": "Medium",
@@ -255,7 +253,7 @@
         "lastUpdated": "2026-07-21",
         "issues": "Two imoten lists are covered by one contract. Both owners appear as 1/1 on their respective parcels; signatures need confirmation.",
         "nextAction": "Confirm that both land owners signed the contract and check any object or encumbrance details from the full imoten list.",
-        "notes": "The source extracts show object sections, but they are partially cropped. Use the source documents for complete object details."
+        "notes": "The source extracts show object sections, but they are partially cropped. Use the source documents for complete object details. This is the site previously tracked separately as \"Krnjevo\" — the two entries were the same development and were merged. Крњево 2 is the ДУП locality; Центар 1 is the cadastral municipality, so both names refer to this one plot."
       },
       "parcels": [
         {
@@ -921,5 +919,52 @@
       "project": "skopje-k-voda"
     }
   ],
-  "documents": []
+  "documents": [
+    {
+      "id": "3f8c21d7-9b04-4e56-a1f2-6d0b7e934c15",
+      "date": "2026-07-17",
+      "type": "land-contract",
+      "title": "Договор за пренос на дел од право на градење — Анчо Драгоманов",
+      "reference": "ОДУ 1350/26",
+      "issuer": "Нотар Анастасија Петреска, Град Скопје",
+      "description": "Солемнизиран договор за пренос на дел од право на градење на градежно земјиште за градба П+5+ПК на ГП 5.3, ДУП локалитет Крњево 2, КО Центар 1, Општина Центар, Скопје. Соинвеститорот добива 330 m² нето изградена површина поделена во 6 посебни делови.",
+      "details": {
+        "Книга": "КП бр. 33",
+        "Солемнизација": "17.07.2026, 10:00 часот",
+        "Договор склучен": "10.07.2026, Скопје",
+        "Инвеститор": "ДЕЛУКСЕ ХОМЕ ДОО с. Лешок, Теарце",
+        "Соинвеститор/Сопственик": "Анчо Драгоманов, Скопје",
+        "Градба": "П+5+ПК на ГП 5.3",
+        "Нето изградена површина": "330 m²",
+        "Посебни делови": "6",
+        "Примероци": "5 идентични примероци",
+        "Надлежен суд": "Суд во Скопје",
+        "Скен": "Не е објавен — оригиналот содржи лични податоци"
+      },
+      "project": "centar-7"
+    },
+    {
+      "id": "5a9d34e8-2c17-4f83-b6d1-8e2a5f047b39",
+      "date": "2026-07-20",
+      "type": "land-contract",
+      "title": "Договор за пренос на дел од право на градење — Зоран Драгоманов",
+      "reference": "ОДУ 1363/26",
+      "issuer": "Нотар Анастасија Петреска, Град Скопје",
+      "description": "Солемнизиран договор за пренос на дел од право на градење на градежно земјиште за градба П+5+ПК на ГП 5.3, ДУП локалитет Крњево 2, КО Центар 1, Општина Центар, Скопје. Соинвеститорот добива 285 m² нето изградена површина поделена во 5 посебни делови.",
+      "details": {
+        "Книга": "КП бр. 33",
+        "Солемнизација": "20.07.2026, 14:30 часот",
+        "Договор склучен": "20.07.2026, Скопје",
+        "Инвеститор": "ДЕЛУКСЕ ХОМЕ ДОО с. Лешок, Теарце",
+        "Соинвеститор/Сопственик": "Зоран Драгоманов, Скопје",
+        "Градба": "П+5+ПК на ГП 5.3",
+        "Нето изградена површина": "285 m²",
+        "Посебни делови": "5",
+        "Примероци": "4 идентични примероци",
+        "Надлежен суд": "Суд во Скопје",
+        "Скен": "Не е објавен — оригиналот содржи лични податоци"
+      },
+      "project": "centar-7"
+    }
+  ]
 }
