@@ -15,11 +15,6 @@
     "icon": "🏗️"
   },
   {
-    "id": "krnjevo",
-    "name": "Krnjevo",
-    "icon": "🏠"
-  },
-  {
     "id": "vlae-1",
     "name": "Vlae Project Nr. 1",
     "icon": "🏢",
@@ -238,6 +233,9 @@
       "contractNo": 7,
       "location": "Centar",
       "municipality": "ЦЕНТАР 1 - СКОПЈЕ",
+      "dupLocality": "Крњево 2",
+      "buildingPlot": "ГП 5.3",
+      "building": "П+5+ПК",
       "investor": "Delukse Home DOO",
       "status": "Not confirmed",
       "risk": "Medium",
@@ -247,7 +245,7 @@
       "lastUpdated": "2026-07-21",
       "issues": "Two imoten lists are covered by one contract. Both owners appear as 1/1 on their respective parcels; signatures need confirmation.",
       "nextAction": "Confirm that both land owners signed the contract and check any object or encumbrance details from the full imoten list.",
-      "notes": "The source extracts show object sections, but they are partially cropped. Use the source documents for complete object details."
+      "notes": "The source extracts show object sections, but they are partially cropped. Use the source documents for complete object details. This is the site previously tracked separately as \"Krnjevo\" — the two entries were the same development and were merged. Крњево 2 is the ДУП locality; Центар 1 is the cadastral municipality, so both names refer to this one plot."
     },
     "parcels": [
       {
