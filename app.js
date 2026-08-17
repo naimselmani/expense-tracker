@@ -225,27 +225,7 @@
       .map(([k, v]) => `<dt>${escapeHTML(k)}</dt><dd>${escapeHTML(v)}</dd>`).join('')}</dl>`;
 
     let files = '';
-    if (Array.isArray(e.attachments) && e.attachments.length) {
-      // Stored under a GUID; label + download name are the original
-      // filename. Tapping the name previews, the arrow downloads, and
-      // "See details" opens the transcribed document text.
-      files = `<div class="exp-files">${e.attachments.map((a, i) => `
-        <div class="exp-file-row" data-exp="${escapeHTML(e.id)}" data-idx="${i}">
-          <div class="exp-file-main">
-            <a class="exp-file" href="${escapeHTML(a.file)}">
-              <span aria-hidden="true">📎</span>
-              <span class="fname">${escapeHTML(a.originalName)}</span>
-            </a>
-            <div class="exp-file-sub">
-              ${escapeHTML([a.mime || '', fmtSize(a.size), a.uploaded ? 'uploaded ' + fmtUploaded(a.uploaded) : ''].filter(Boolean).join(' · '))}
-              ${a.extractedText ? '<button type="button" class="exp-text-btn">See details</button>' : ''}
-            </div>
-          </div>
-          <a class="exp-dl" href="${escapeHTML(a.file)}" download="${escapeHTML(a.originalName)}"
-             aria-label="Download ${escapeHTML(a.originalName)}">⬇</a>
-        </div>
-      `).join('')}</div>`;
-    }
+    files = attachmentsHtml(e.id, e.attachments);
 
     return `
       <div class="exp" data-id="${escapeHTML(e.id)}">
@@ -269,6 +249,30 @@
         </div>
       </div>
     `;
+  }
+
+  // Shared by expenses and documents — both store scans the same way.
+  // Stored under a GUID; label + download name are the original filename.
+  // Tapping the name previews, the arrow downloads, and "See details"
+  // opens the transcribed document text.
+  function attachmentsHtml(ownerId, atts) {
+    if (!Array.isArray(atts) || !atts.length) return '';
+    return `<div class="exp-files">${atts.map((a, i) => `
+      <div class="exp-file-row" data-exp="${escapeHTML(ownerId)}" data-idx="${i}">
+        <div class="exp-file-main">
+          <a class="exp-file" href="${escapeHTML(a.file)}">
+            <span aria-hidden="true">📎</span>
+            <span class="fname">${escapeHTML(a.originalName)}</span>
+          </a>
+          <div class="exp-file-sub">
+            ${escapeHTML([a.mime || '', fmtSize(a.size), a.uploaded ? 'uploaded ' + fmtUploaded(a.uploaded) : ''].filter(Boolean).join(' · '))}
+            ${a.extractedText ? '<button type="button" class="exp-text-btn">See details</button>' : ''}
+          </div>
+        </div>
+        <a class="exp-dl" href="${escapeHTML(a.file)}" download="${escapeHTML(a.originalName)}"
+           aria-label="Download ${escapeHTML(a.originalName)}">⬇</a>
+      </div>
+    `).join('')}</div>`;
   }
 
   function expenseListHtml(expenses) {
@@ -391,6 +395,106 @@
       ${noteBlock('Next action', c.nextAction)}
       ${noteBlock('Notes', c.notes)}
     `;
+  }
+
+  // ---- Documents view: the paper trail, and how far the project has got ----
+
+  function visibleDocuments() {
+    const all = data.documents || [];
+    return showingAllProjects() ? all : all.filter((d) => d.project === currentProject);
+  }
+
+  function docTypeOf(id) {
+    return (data.docTypes || []).find((t) => t.id === id);
+  }
+
+  function stagesOrdered() {
+    return (data.stages || []).slice().sort((a, b) => a.order - b.order);
+  }
+
+  // A project's stage is the furthest one any of its documents unlocks.
+  // Types without a stage (e.g. "other") deliberately advance nothing.
+  function reachedStage(docs) {
+    let best = null;
+    for (const d of docs) {
+      const t = docTypeOf(d.type);
+      if (!t || !t.stage) continue;
+      const s = (data.stages || []).find((x) => x.id === t.stage);
+      if (s && (!best || s.order > best.order)) best = s;
+    }
+    return best;
+  }
+
+  function renderStageTrack() {
+    const track = $('stage-track');
+    // Across all projects there is no single position in the process.
+    if (showingAllProjects()) {
+      track.innerHTML = '<div class="empty">Pick a project to see its stage.</div>';
+      return;
+    }
+    const docs = visibleDocuments();
+    const best = reachedStage(docs);
+    const list = stagesOrdered();
+    if (!list.length) {
+      track.innerHTML = '<div class="empty">No stages configured.</div>';
+      return;
+    }
+    track.innerHTML = list.map((s) => {
+      const done = best && s.order <= best.order;
+      const current = best && s.order === best.order;
+      const count = docs.filter((d) => {
+        const t = docTypeOf(d.type);
+        return t && t.stage === s.id;
+      }).length;
+      return `
+        <div class="stg${done ? ' done' : ''}${current ? ' current' : ''}">
+          <span class="stg-dot" aria-hidden="true">${done ? '✓' : escapeHTML(String(s.order))}</span>
+          <div class="stg-body">
+            <div class="stg-name">${escapeHTML(s.name)}</div>
+            <div class="stg-sub">${escapeHTML(s.nameMk || '')}${count ? ` · ${count} doc${count === 1 ? '' : 's'}` : ''}</div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function documentHtml(d) {
+    const t = docTypeOf(d.type);
+    const icon = (t && t.icon) || '📄';
+    const typeName = (t && t.name) || d.type;
+    const details = d.details && Object.keys(d.details).length
+      ? `<dl class="exp-fields">${Object.entries(d.details)
+        .map(([k, v]) => `<dt>${escapeHTML(k)}</dt><dd>${escapeHTML(v)}</dd>`).join('')}</dl>`
+      : '';
+    return `
+      <div class="exp" data-id="${escapeHTML(d.id)}">
+        <div class="exp-head">
+          <span class="exp-icon" aria-hidden="true">${escapeHTML(icon)}</span>
+          <div class="exp-main">
+            <div class="exp-vendor">${escapeHTML(d.title)}</div>
+            <div class="exp-sub">${showingAllProjects() ? `<span class="exp-proj">${escapeHTML(projectLabel(d.project))}</span> · ` : ''}${escapeHTML(typeName)}${d.issuer ? ' · ' + escapeHTML(d.issuer) : ''}</div>
+          </div>
+          <div class="exp-right">
+            ${d.reference ? `<div class="exp-amt doc-ref">${escapeHTML(d.reference)}</div>` : ''}
+            <div class="exp-date">${escapeHTML(fmtDate(d.date))}</div>
+          </div>
+        </div>
+        <div class="exp-detail">
+          ${d.description ? `<p class="exp-desc">${escapeHTML(d.description)}</p>` : ''}
+          ${details}
+          ${attachmentsHtml(d.id, d.attachments)}
+        </div>
+      </div>`;
+  }
+
+  function renderDocumentsView() {
+    const docs = visibleDocuments()
+      .slice()
+      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+    $('doc-count').textContent = docs.length ? `${docs.length} total` : '';
+    $('document-list').innerHTML = docs.length
+      ? `<div class="expense-list">${docs.map(documentHtml).join('')}</div>`
+      : '<div class="empty">No documents yet.</div>';
+    renderStageTrack();
   }
 
   // ---- Expenses view: period scope, skip-empty navigation, grouping ----
@@ -898,9 +1002,11 @@
   const lightbox = $('lightbox');
   let lbAtt = null;
 
-  function findAttachment(expId, idx) {
-    const exp = data.expenses.find((x) => x.id === expId);
-    return exp && Array.isArray(exp.attachments) ? exp.attachments[Number(idx)] || null : null;
+  // Owners are expenses or documents — both carry attachments in the same shape.
+  function findAttachment(ownerId, idx) {
+    const owner = data.expenses.find((x) => x.id === ownerId)
+      || (data.documents || []).find((x) => x.id === ownerId);
+    return owner && Array.isArray(owner.attachments) ? owner.attachments[Number(idx)] || null : null;
   }
 
   function previewKind(mime, file) {
@@ -1009,6 +1115,7 @@
 
     renderOverview();
     renderExpensesView();
+    renderDocumentsView();
     renderReports();
   }
 

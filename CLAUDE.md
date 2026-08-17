@@ -100,6 +100,34 @@ Direct pushes to `main` are blocked. To land changes on production:
 
 This applies even when the user just says "merge it" — the PR + green-checks loop is the merge mechanism, not an extra step.
 
+## Two trees: money vs. paper. Never mix them.
+
+An upload is either an **expense** or a **document**, never both, and the two live in separate trees:
+
+| | Expense | Document |
+|---|---|---|
+| What it is | Money leaving the project | The paper trail of the project |
+| Examples | Invoice, fiscal receipt, delivery note with a price, wage payment | Land contract, property extract (имотен лист), urban plan extract, design documentation, construction permit, technical inspection report, occupancy permit |
+| Lives in | `data/expenses/<project>/<yyyy>/<mm>/<id>.json` | `data/documents/<project>/<yyyy>/<mm>/<id>.json` |
+| Must have | `amount`, `currency`, `vendor`, `category` | `type`, `title` — and **never** `amount` |
+| Affects | Totals, category breakdown, reports | The project's **stage** in the lifecycle |
+
+**Deciding which one:** does the paper record a sum the owner paid? Then it is an expense. Does it record a right, an approval, or a legal fact? Then it is a document. A construction permit that cost a fee in administrative taxes is *both* — file the permit as a document and the fee as a separate expense, each with its own copy of the scan if needed (the duplicate guard will ask you to confirm with `allowDuplicate`).
+
+The build script enforces the split: an `amount` on a document is a hard validation failure telling you to post it under `data/expenses/` instead.
+
+### Project stages
+
+`data/stages.json` is the ordered lifecycle; `data/doctypes.json` maps each document type to the stage it unlocks. A project's current stage is the furthest stage any of its documents reaches — so filing a construction permit moves the project to stage 5 automatically, with no separate status field to maintain. Types with no `stage` (e.g. `other`) deliberately advance nothing.
+
+Adding a stage or a document type is a data change only — edit the registry, no code.
+
+### Adding a document
+
+Same shape as adding an expense: store the scan under a GUID in `files/`, transcribe **all readable text verbatim** into the attachment's `extractedText`, compute its `sha256`, write the per-document JSON, land it via PR with green CI. Ask which project it belongs to if it isn't obvious. Optional `reference`, `issuer`, `description` and a free-form `details` object (the document type declares suggested `fields`).
+
+The duplicate check covers documents too, and the `sha256` side is **global across both trees** — the same scan cannot be filed as an expense receipt and a project document without explicit confirmation.
+
 ## Expenses ledger
 
 The Expenses app is a read-only construction-cost ledger whose writes happen through Claude Code sessions. Source of truth is committed per-expense files, aggregated at deploy time:
@@ -109,7 +137,9 @@ The Expenses app is a read-only construction-cost ledger whose writes happen thr
 - `data/categories.json` — category registry, **shared across projects**; each category declares its own `fields`, so new expense types need data changes only.
 - `data/expenses/<project-id>/<yyyy>/<mm>/<id>.json` — one expense per file; the top folder is the project (must match a `projects.json` id), the date folders derive from the expense's ISO UTC `date`. Filename must equal the expense `id` (a GUID). When adding an expense, ask which project it belongs to if it isn't obvious.
 - `files/<guid>.<ext>` — attachment originals; metadata keeps `originalName` (used as label and download name) and `size` (must match the file on disk).
-- `data/expenses.json` is **generated** by `scripts/build-expenses-data.mjs` (run automatically by `pages.yml` on deploy and by `npm run dev` via `predev`). It is gitignored — never edit or commit it. CI runs the script with `--check` to block malformed data.
+- `data/stages.json` — ordered project lifecycle stages.
+- `data/doctypes.json` — document type registry; each type may declare the `stage` it unlocks.
+- `data/expenses.json` is **generated** by `scripts/build-expenses-data.mjs` (run automatically by `pages.yml` on deploy and by `npm run dev` via `predev`). Despite the name it carries the whole aggregate — projects, categories, stages, document types, expenses **and** documents — because the app makes a single fetch. It is gitignored — never edit or commit it. CI runs the script with `--check` to block malformed data.
 
 Adding an expense from an uploaded document: store the file under a GUID in `files/`, transcribe **all readable text verbatim** (original script — e.g. Macedonian Cyrillic) into the attachment's `extractedText` field for future content search, compute the file's `sha256` (`sha256sum <file>`) into the attachment metadata, write the per-expense JSON, then land it on `main` via the normal PR + green CI flow. The user confirms extracted details before anything is committed.
 
@@ -119,7 +149,7 @@ Adding an expense from an uploaded document: store the file under a GUID in `fil
 
 Do this with `grep` only — never read expense files in bulk; the check must cost the same at 10,000 expenses as at 20:
 
-1. **Exact re-upload:** `grep -rl "<sha256-of-new-file>" data/expenses/` — a hit means this exact document is already attached to an expense.
+1. **Exact re-upload:** `grep -rl "<sha256-of-new-file>" data/expenses/ data/documents/` — a hit means this exact file is already attached somewhere. Search both trees: the same scan must not be filed as an expense receipt and a project document without confirmation.
 2. **Same invoice, different photo:** `grep -rl '"amount": <amount>' data/expenses/<project-id>/<yyyy>/` then narrow the (few) hits by currency/date/vendor, and compare invoice/reference numbers against the new document's text. (The `sha256` check stays global across projects; the semantic check is per project, matching the validator.)
 
 ### On detection: always prompt, and batch the prompts
