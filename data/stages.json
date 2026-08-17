@@ -1,0 +1,58 @@
+[
+  {
+    "id": "land-contract",
+    "order": 1,
+    "name": "Land contract",
+    "nameMk": "Договор",
+    "icon": "📜"
+  },
+  {
+    "id": "ownership",
+    "order": 2,
+    "name": "Ownership / cadastre",
+    "nameMk": "Имотен лист",
+    "icon": "🗺️"
+  },
+  {
+    "id": "urban-plan",
+    "order": 3,
+    "name": "Urban plan extract",
+    "nameMk": "Извод од ДУП",
+    "icon": "🏙️"
+  },
+  {
+    "id": "design",
+    "order": 4,
+    "name": "Design documentation",
+    "nameMk": "Проектна документација",
+    "icon": "📐"
+  },
+  {
+    "id": "construction-permit",
+    "order": 5,
+    "name": "Construction permit",
+    "nameMk": "Одобрение за градење",
+    "icon": "✅"
+  },
+  {
+    "id": "construction",
+    "order": 6,
+    "name": "Construction",
+    "nameMk": "Изградба",
+    "icon": "🏗️"
+  },
+  {
+    "id": "technical-inspection",
+    "order": 7,
+    "name": "Technical inspection",
+    "nameMk": "Технички преглед",
+    "icon": "🔍"
+  },
+  {
+    "id": "occupancy-permit",
+    "order": 8,
+    "name": "Occupancy permit",
+    "nameMk": "Одобрение за употреба",
+    "icon": "🔑"
+  }
+]

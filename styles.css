@@ -1001,6 +1001,74 @@ button { cursor: pointer; font-family: inherit; }
 
 .lb-fallback { padding: 30px; text-align: center; color: var(--text-2); font-size: 14px; }
 
+/* ---- Documents view: stage track + document rows ---- */
+
+.section-meta { font-size: 11px; font-weight: 600; color: var(--text-3); }
+
+.stage-track {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 var(--pad);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-xs);
+  padding: 6px 14px;
+}
+
+.stg {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  position: relative;
+}
+
+/* Connector between consecutive steps, drawn from the dot downward. */
+.stg:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 30px;
+  bottom: -6px;
+  width: 2px;
+  background: var(--border);
+}
+
+.stg.done:not(:last-child)::before { background: var(--green-mid); }
+
+.stg-dot {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--text-3);
+  border: 1px solid var(--border-2);
+  z-index: 1;
+}
+
+.stg.done .stg-dot {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+.stg.current .stg-dot { box-shadow: 0 0 0 4px var(--green-lt); }
+
+.stg-body { min-width: 0; }
+.stg-name { font-size: 13px; font-weight: 600; color: var(--text-3); }
+.stg.done .stg-name { color: var(--text); font-weight: 700; }
+.stg-sub { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+
+/* A document has a reference, not an amount — it should not shout like money. */
+.exp-amt.doc-ref { font-size: 12px; font-weight: 700; color: var(--text-2); }
+
 /* ---- Contract card: land-contract detail on the Overview tab ---- */
 
 .contract-card {

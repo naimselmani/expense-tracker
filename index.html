@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=27a6821">
+  <link rel="stylesheet" href="styles.css?v=b55fa1f">
 </head>
 <body>
   <div id="app-loading">
@@ -110,6 +110,13 @@
         <div id="expense-list" class="card-list-wrap"></div>
       </section>
 
+      <section id="view-documents" class="view">
+        <div class="section-head"><span class="section-label">Project stage</span></div>
+        <div id="stage-track" class="stage-track"></div>
+        <div class="section-head"><span class="section-label">Documents</span><span class="section-meta" id="doc-count"></span></div>
+        <div id="document-list" class="card-list-wrap"></div>
+      </section>
+
       <section id="view-reports" class="view">
         <div class="period-nav period-nav-center">
           <button id="year-prev" class="nav-round" type="button" aria-label="Previous year">‹</button>
@@ -143,6 +150,10 @@
       <button class="nav-btn tab" data-view="expenses" role="tab" aria-selected="false">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
         <span class="nav-label">Expenses</span>
+      </button>
+      <button class="nav-btn tab" data-view="documents" role="tab" aria-selected="false">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        <span class="nav-label">Documents</span>
       </button>
       <button class="nav-btn tab" data-view="reports" role="tab" aria-selected="false">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
@@ -179,6 +190,6 @@
   <div class="viz-tip" id="viz-tip" hidden></div>
 
   <noscript>This app needs JavaScript to load the ledger.</noscript>
-  <script src="app.js?v=27a6821"></script>
+  <script src="app.js?v=b55fa1f"></script>
 </body>
 </html>

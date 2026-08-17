@@ -4,7 +4,7 @@
     "fixedRates": {
       "MKD": 61.5
     },
-    "updated": "2026-08-17T13:31:59.296Z"
+    "updated": "2026-08-17T14:10:52.576Z"
   },
   "projects": [
     {
@@ -422,6 +422,169 @@
       ]
     }
   ],
+  "stages": [
+    {
+      "id": "land-contract",
+      "order": 1,
+      "name": "Land contract",
+      "nameMk": "Договор",
+      "icon": "📜"
+    },
+    {
+      "id": "ownership",
+      "order": 2,
+      "name": "Ownership / cadastre",
+      "nameMk": "Имотен лист",
+      "icon": "🗺️"
+    },
+    {
+      "id": "urban-plan",
+      "order": 3,
+      "name": "Urban plan extract",
+      "nameMk": "Извод од ДУП",
+      "icon": "🏙️"
+    },
+    {
+      "id": "design",
+      "order": 4,
+      "name": "Design documentation",
+      "nameMk": "Проектна документација",
+      "icon": "📐"
+    },
+    {
+      "id": "construction-permit",
+      "order": 5,
+      "name": "Construction permit",
+      "nameMk": "Одобрение за градење",
+      "icon": "✅"
+    },
+    {
+      "id": "construction",
+      "order": 6,
+      "name": "Construction",
+      "nameMk": "Изградба",
+      "icon": "🏗️"
+    },
+    {
+      "id": "technical-inspection",
+      "order": 7,
+      "name": "Technical inspection",
+      "nameMk": "Технички преглед",
+      "icon": "🔍"
+    },
+    {
+      "id": "occupancy-permit",
+      "order": 8,
+      "name": "Occupancy permit",
+      "nameMk": "Одобрение за употреба",
+      "icon": "🔑"
+    }
+  ],
+  "docTypes": [
+    {
+      "id": "land-contract",
+      "name": "Land contract",
+      "nameMk": "Договор за земјиште",
+      "stage": "land-contract",
+      "icon": "📜",
+      "fields": [
+        "counterparty",
+        "notary",
+        "reference"
+      ]
+    },
+    {
+      "id": "imoten-list",
+      "name": "Property extract",
+      "nameMk": "Имотен лист",
+      "stage": "ownership",
+      "icon": "🗺️",
+      "fields": [
+        "imotenList",
+        "parcelNo",
+        "cadastralMunicipality"
+      ]
+    },
+    {
+      "id": "dup-extract",
+      "name": "Urban plan extract",
+      "nameMk": "Извод од ДУП",
+      "stage": "urban-plan",
+      "icon": "🏙️",
+      "fields": [
+        "authority",
+        "reference",
+        "planName"
+      ]
+    },
+    {
+      "id": "design-project",
+      "name": "Design documentation",
+      "nameMk": "Проектна документација",
+      "stage": "design",
+      "icon": "📐",
+      "fields": [
+        "firm",
+        "phase",
+        "reference"
+      ]
+    },
+    {
+      "id": "construction-permit",
+      "name": "Construction permit",
+      "nameMk": "Одобрение за градење",
+      "stage": "construction-permit",
+      "icon": "✅",
+      "fields": [
+        "authority",
+        "reference",
+        "validUntil"
+      ]
+    },
+    {
+      "id": "construction-record",
+      "name": "Construction record",
+      "nameMk": "Градежен дневник",
+      "stage": "construction",
+      "icon": "🏗️",
+      "fields": [
+        "supervisor",
+        "period"
+      ]
+    },
+    {
+      "id": "technical-inspection",
+      "name": "Technical inspection report",
+      "nameMk": "Записник за технички преглед",
+      "stage": "technical-inspection",
+      "icon": "🔍",
+      "fields": [
+        "authority",
+        "reference"
+      ]
+    },
+    {
+      "id": "occupancy-permit",
+      "name": "Occupancy permit",
+      "nameMk": "Одобрение за употреба",
+      "stage": "occupancy-permit",
+      "icon": "🔑",
+      "fields": [
+        "authority",
+        "reference"
+      ]
+    },
+    {
+      "id": "other",
+      "name": "Other document",
+      "nameMk": "Друг документ",
+      "icon": "📄",
+      "fields": [
+        "issuer",
+        "reference"
+      ]
+    }
+  ],
   "expenses": [
     {
       "id": "968259df-41f5-4d56-b6a3-f1873b657b1f",
@@ -757,5 +920,6 @@
       ],
       "project": "skopje-k-voda"
     }
-  ]
+  ],
+  "documents": []
 }
