@@ -371,6 +371,9 @@
       <dl class="ct-facts">
         ${factRow('Location', c.location)}
         ${factRow('Cadastral municipality', c.municipality)}
+        ${factRow('Urban plan locality', c.dupLocality)}
+        ${factRow('Building plot', c.buildingPlot)}
+        ${factRow('Building', c.building)}
         ${factRow('Investor', c.investor)}
         ${factRow('Owners', c.ownersCount)}
         ${factRow('Last updated', c.lastUpdated)}
