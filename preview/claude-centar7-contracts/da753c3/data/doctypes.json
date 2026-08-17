@@ -1,0 +1,73 @@
+[
+  {
+    "id": "land-contract",
+    "name": "Land contract",
+    "nameMk": "Договор за земјиште",
+    "stage": "land-contract",
+    "icon": "📜",
+    "fields": ["counterparty", "notary", "reference"]
+  },
+  {
+    "id": "imoten-list",
+    "name": "Property extract",
+    "nameMk": "Имотен лист",
+    "stage": "ownership",
+    "icon": "🗺️",
+    "fields": ["imotenList", "parcelNo", "cadastralMunicipality"]
+  },
+  {
+    "id": "dup-extract",
+    "name": "Urban plan extract",
+    "nameMk": "Извод од ДУП",
+    "stage": "urban-plan",
+    "icon": "🏙️",
+    "fields": ["authority", "reference", "planName"]
+  },
+  {
+    "id": "design-project",
+    "name": "Design documentation",
+    "nameMk": "Проектна документација",
+    "stage": "design",
+    "icon": "📐",
+    "fields": ["firm", "phase", "reference"]
+  },
+  {
+    "id": "construction-permit",
+    "name": "Construction permit",
+    "nameMk": "Одобрение за градење",
+    "stage": "construction-permit",
+    "icon": "✅",
+    "fields": ["authority", "reference", "validUntil"]
+  },
+  {
+    "id": "construction-record",
+    "name": "Construction record",
+    "nameMk": "Градежен дневник",
+    "stage": "construction",
+    "icon": "🏗️",
+    "fields": ["supervisor", "period"]
+  },
+  {
+    "id": "technical-inspection",
+    "name": "Technical inspection report",
+    "nameMk": "Записник за технички преглед",
+    "stage": "technical-inspection",
+    "icon": "🔍",
+    "fields": ["authority", "reference"]
+  },
+  {
+    "id": "occupancy-permit",
+    "name": "Occupancy permit",
+    "nameMk": "Одобрение за употреба",
+    "stage": "occupancy-permit",
+    "icon": "🔑",
+    "fields": ["authority", "reference"]
+  },
+  {
+    "id": "other",
+    "name": "Other document",
+    "nameMk": "Друг документ",
+    "icon": "📄",
+    "fields": ["issuer", "reference"]
+  }
+]

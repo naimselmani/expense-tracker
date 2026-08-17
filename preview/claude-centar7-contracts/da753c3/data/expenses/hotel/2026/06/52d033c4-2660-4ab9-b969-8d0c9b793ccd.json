@@ -1,0 +1,18 @@
+{
+  "id": "52d033c4-2660-4ab9-b969-8d0c9b793ccd",
+  "date": "2026-06-10",
+  "amount": 2380,
+  "currency": "MKD",
+  "vendor": "Ceva plastik per ne temel odvod",
+  "category": "materials",
+  "attachments": [
+    {
+      "file": "files/f5c234c7-2834-44aa-af4e-2cbe585b8fc2.jpeg",
+      "originalName": "image.jpg",
+      "mime": "image/jpeg",
+      "size": 505457,
+      "uploaded": "2026-06-10T15:46:59.607Z",
+      "sha256": "c18d5de4a7c9c9b08e4c12c853440f7e7125e3226cc1139e04b810ff26421cad"
+    }
+  ]
+}
