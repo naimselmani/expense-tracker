@@ -1,0 +1,923 @@
+{
+  "meta": {
+    "baseCurrency": "EUR",
+    "fixedRates": {
+      "MKD": 61.5
+    },
+    "updated": "2026-08-17T15:47:29.327Z"
+  },
+  "projects": [
+    {
+      "id": "hotel",
+      "name": "Hotel",
+      "icon": "🏨"
+    },
+    {
+      "id": "skopje-k-voda",
+      "name": "Skopje k voda",
+      "icon": "💧"
+    },
+    {
+      "id": "crniche",
+      "name": "Crniche",
+      "icon": "🏗️"
+    },
+    {
+      "id": "vlae-1",
+      "name": "Vlae Project Nr. 1",
+      "icon": "🏢",
+      "contract": {
+        "reference": "C-001",
+        "contractNo": 1,
+        "location": "Vlae",
+        "municipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Medium",
+        "issueFlag": "Needs review",
+        "totalAreaM2": 642,
+        "ownersCount": 3,
+        "lastUpdated": "2026-07-31",
+        "issues": "Republic of Macedonia has a 35/642 share. Delukse Home is already listed with 50/642. Verify whether the state share affects the contract, ownership transfer, construction rights and compensation model.",
+        "nextAction": "Check contract signatures, the legal treatment of the Republic of Macedonia share, and whether the Delukse Home share is already properly registered.",
+        "notes": "Land includes 496 m² construction built land and 146 m² land under building."
+      },
+      "parcels": [
+        {
+          "imotenList": "101841",
+          "parcelNo": "7503",
+          "cadastralMunicipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+          "areaM2": 642,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда",
+          "right": "Сопственост",
+          "areaBreakdown": "496 m² construction built land; 146 m² land under building"
+        }
+      ]
+    },
+    {
+      "id": "vlae-2",
+      "name": "Vlae Project Nr. 2",
+      "icon": "🏢",
+      "contract": {
+        "reference": "C-002",
+        "contractNo": 2,
+        "location": "Vlae",
+        "municipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Low",
+        "issueFlag": "No visible ownership issue",
+        "totalAreaM2": 284,
+        "ownersCount": 1,
+        "lastUpdated": "2026-06-11",
+        "issues": "No visible ownership issue from the extract. Contract signature and notarization still need confirmation.",
+        "nextAction": "Confirm that the land owner signed the contract and that no extra encumbrances exist in the full imoten list extract.",
+        "notes": "Single owner shown as 1/1. Land type shown as construction built land."
+      },
+      "parcels": [
+        {
+          "imotenList": "104812",
+          "parcelNo": "7507/1",
+          "cadastralMunicipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+          "areaM2": 284,
+          "landDescription": "ГИЗ градежно изградено земјиште",
+          "right": "Сопственост",
+          "areaBreakdown": "284 m² construction built land"
+        }
+      ]
+    },
+    {
+      "id": "vlae-3",
+      "name": "Vlae Project Nr. 3",
+      "icon": "🏢",
+      "contract": {
+        "reference": "C-003",
+        "contractNo": 3,
+        "location": "Vlae",
+        "municipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "High",
+        "issueFlag": "State ownership share",
+        "totalAreaM2": 176,
+        "ownersCount": 2,
+        "lastUpdated": "2026-06-11",
+        "issues": "Republic of Macedonia owns 83/176. This is a large state share and must be checked before treating the contract as clean.",
+        "nextAction": "Verify whether the state share can be acquired, compensated, consolidated or excluded from the project documentation.",
+        "notes": "Same land owner as Project Nr. 1, but another imoten list and another parcel. Land type shown as Н Нива."
+      },
+      "parcels": [
+        {
+          "imotenList": "101308",
+          "parcelNo": "7515",
+          "cadastralMunicipality": "ЃОРЧЕ ПЕТРОВ 4 - ВЛАЕ",
+          "areaM2": 176,
+          "landDescription": "Н Нива",
+          "right": "Сопственост",
+          "areaBreakdown": "176 m²"
+        }
+      ]
+    },
+    {
+      "id": "kisela-voda-4",
+      "name": "Kisela Voda Project Nr. 4",
+      "icon": "🏘️",
+      "contract": {
+        "reference": "C-004",
+        "contractNo": 4,
+        "location": "Kisela Voda",
+        "municipality": "КИСЕЛА ВОДА 1 - СКОПЈЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Partially signed",
+        "risk": "High",
+        "issueFlag": "Missing signature",
+        "totalAreaM2": 286,
+        "ownersCount": 3,
+        "lastUpdated": "2026-06-11",
+        "issues": "Two of the three owners have signed this contract; the third has not signed yet. The extract shows one listed rights holder, so the contract parties must be compared against the actual contract.",
+        "nextAction": "Identify the third owner from the contract file and collect the missing signature before treating the contract as complete.",
+        "notes": "Two parcels under one imoten list. Both shown as construction unbuilt land."
+      },
+      "parcels": [
+        {
+          "imotenList": "38367",
+          "parcelNo": "865/3",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 12,
+          "landDescription": "ГНЗ градежно неизградено земјиште",
+          "right": "Сопственост",
+          "areaBreakdown": "12 m²"
+        },
+        {
+          "imotenList": "38367",
+          "parcelNo": "865/4",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 274,
+          "landDescription": "ГНЗ градежно неизградено земјиште",
+          "right": "Сопственост",
+          "areaBreakdown": "274 m²"
+        }
+      ]
+    },
+    {
+      "id": "kisela-voda-5",
+      "name": "Kisela Voda Project Nr. 5",
+      "icon": "🏘️",
+      "contract": {
+        "reference": "C-005",
+        "contractNo": 5,
+        "location": "Kisela Voda",
+        "municipality": "КИСЕЛА ВОДА 1 - СКОПЈЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Medium",
+        "issueFlag": "Multiple imoten lists",
+        "totalAreaM2": 1972,
+        "ownersCount": 4,
+        "lastUpdated": "2026-06-11",
+        "issues": "Two imoten lists are covered by one contract. All co-owners from imoten list 5881 and the owner from imoten list 57018 should be checked against the signatures.",
+        "nextAction": "Confirm signatures for all four co-owners across both imoten lists, and confirm both lists are properly included in the same contract.",
+        "notes": "Contract contains parcel 1708 with 1230 m² and parcel 1707 with 742 m². Total combined area 1972 m²."
+      },
+      "parcels": [
+        {
+          "imotenList": "5881",
+          "parcelNo": "1708",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 1230,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда/објект",
+          "right": "Сопственост",
+          "areaBreakdown": "1027 m² construction built land; 145 m² land under building; 58 m² land under object"
+        },
+        {
+          "imotenList": "57018",
+          "parcelNo": "1707",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 742,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда/објект",
+          "right": "Сопственост",
+          "areaBreakdown": "619 m² construction built land; 112 m² land under building; 11 m² land under object"
+        }
+      ]
+    },
+    {
+      "id": "kisela-voda-6",
+      "name": "Kisela Voda Project Nr. 6",
+      "icon": "🏘️",
+      "contract": {
+        "reference": "C-006",
+        "contractNo": 6,
+        "location": "Kisela Voda",
+        "municipality": "КИСЕЛА ВОДА 1 - СКОПЈЕ",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Medium",
+        "issueFlag": "Two owners",
+        "totalAreaM2": 291,
+        "ownersCount": 2,
+        "lastUpdated": "2026-06-11",
+        "issues": "Both 1/2 owners must be confirmed as signatories to the contract.",
+        "nextAction": "Confirm signatures and compare the contract parties with the imoten list owners.",
+        "notes": "Parcel address shown as Ul. Drenak br. 3A."
+      },
+      "parcels": [
+        {
+          "imotenList": "58013",
+          "parcelNo": "198",
+          "cadastralMunicipality": "КИСЕЛА ВОДА 1",
+          "areaM2": 291,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда",
+          "right": "Сопственост",
+          "areaBreakdown": "178 m² construction built land; 54 m² land under building; 59 m² land under building"
+        }
+      ]
+    },
+    {
+      "id": "centar-7",
+      "name": "Centar Project Nr. 7",
+      "icon": "🏙️",
+      "contract": {
+        "reference": "C-007",
+        "contractNo": 7,
+        "location": "Centar",
+        "municipality": "ЦЕНТАР 1 - СКОПЈЕ",
+        "dupLocality": "Крњево 2",
+        "buildingPlot": "ГП 5.3",
+        "building": "П+5+ПК",
+        "investor": "Delukse Home DOO",
+        "status": "Not confirmed",
+        "risk": "Medium",
+        "issueFlag": "Two imoten lists",
+        "totalAreaM2": 464,
+        "ownersCount": 2,
+        "lastUpdated": "2026-07-21",
+        "issues": "Two imoten lists are covered by one contract. Both owners appear as 1/1 on their respective parcels; signatures need confirmation.",
+        "nextAction": "Confirm that both land owners signed the contract and check any object or encumbrance details from the full imoten list.",
+        "notes": "The source extracts show object sections, but they are partially cropped. Use the source documents for complete object details. This is the site previously tracked separately as \"Krnjevo\" — the two entries were the same development and were merged. Крњево 2 is the ДУП locality; Центар 1 is the cadastral municipality, so both names refer to this one plot."
+      },
+      "parcels": [
+        {
+          "imotenList": "96473",
+          "parcelNo": "8396/1",
+          "cadastralMunicipality": "ЦЕНТАР 1",
+          "areaM2": 219,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда",
+          "right": "Сопственост",
+          "areaBreakdown": "97 m² construction built land; 15 m² land under building; 107 m² land under building"
+        },
+        {
+          "imotenList": "5899",
+          "parcelNo": "8396/2",
+          "cadastralMunicipality": "ЦЕНТАР 1",
+          "areaM2": 245,
+          "landDescription": "ГИЗ градежно изградено земјиште + ЗПЗ земјиште под зграда",
+          "right": "Сопственост",
+          "areaBreakdown": "105 m² construction built land; 32 m² land under building; 108 m² land under building"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "permits",
+      "name": "Permits & Fees",
+      "icon": "📋",
+      "fields": [
+        {
+          "key": "authority",
+          "label": "Authority"
+        },
+        {
+          "key": "reference",
+          "label": "Reference no."
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "name": "Design & Engineering",
+      "icon": "📐",
+      "fields": [
+        {
+          "key": "firm",
+          "label": "Firm"
+        },
+        {
+          "key": "phase",
+          "label": "Phase"
+        }
+      ]
+    },
+    {
+      "id": "materials",
+      "name": "Materials",
+      "icon": "🧱",
+      "fields": [
+        {
+          "key": "supplier",
+          "label": "Supplier"
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity"
+        }
+      ]
+    },
+    {
+      "id": "labor",
+      "name": "Labor",
+      "icon": "👷",
+      "fields": [
+        {
+          "key": "crew",
+          "label": "Crew / contractor"
+        },
+        {
+          "key": "period",
+          "label": "Work period"
+        }
+      ]
+    },
+    {
+      "id": "machinery",
+      "name": "Machinery & Equipment",
+      "icon": "🚜",
+      "fields": [
+        {
+          "key": "machine",
+          "label": "Machine"
+        },
+        {
+          "key": "hours",
+          "label": "Hours / days"
+        }
+      ]
+    },
+    {
+      "id": "transport",
+      "name": "Transport",
+      "icon": "🚚",
+      "fields": [
+        {
+          "key": "route",
+          "label": "Route"
+        }
+      ]
+    },
+    {
+      "id": "utilities",
+      "name": "Utilities & Site",
+      "icon": "⚡",
+      "fields": []
+    },
+    {
+      "id": "insurance",
+      "name": "Insurance",
+      "icon": "🛡️",
+      "fields": [
+        {
+          "key": "provider",
+          "label": "Provider"
+        },
+        {
+          "key": "reference",
+          "label": "Reference no."
+        },
+        {
+          "key": "period",
+          "label": "Period covered"
+        }
+      ]
+    },
+    {
+      "id": "meals",
+      "name": "Meals & Hospitality",
+      "icon": "🍽️",
+      "fields": [
+        {
+          "key": "venue",
+          "label": "Venue"
+        },
+        {
+          "key": "receipt",
+          "label": "Receipt no."
+        }
+      ]
+    },
+    {
+      "id": "parking",
+      "name": "Parking",
+      "icon": "🅿️",
+      "fields": [
+        {
+          "key": "location",
+          "label": "Location"
+        },
+        {
+          "key": "receipt",
+          "label": "Receipt no."
+        }
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "id": "land-contract",
+      "order": 1,
+      "name": "Land contract",
+      "nameMk": "Договор",
+      "icon": "📜"
+    },
+    {
+      "id": "ownership",
+      "order": 2,
+      "name": "Ownership / cadastre",
+      "nameMk": "Имотен лист",
+      "icon": "🗺️"
+    },
+    {
+      "id": "urban-plan",
+      "order": 3,
+      "name": "Urban plan extract",
+      "nameMk": "Извод од ДУП",
+      "icon": "🏙️"
+    },
+    {
+      "id": "design",
+      "order": 4,
+      "name": "Design documentation",
+      "nameMk": "Проектна документација",
+      "icon": "📐"
+    },
+    {
+      "id": "construction-permit",
+      "order": 5,
+      "name": "Construction permit",
+      "nameMk": "Одобрение за градење",
+      "icon": "✅"
+    },
+    {
+      "id": "construction",
+      "order": 6,
+      "name": "Construction",
+      "nameMk": "Изградба",
+      "icon": "🏗️"
+    },
+    {
+      "id": "technical-inspection",
+      "order": 7,
+      "name": "Technical inspection",
+      "nameMk": "Технички преглед",
+      "icon": "🔍"
+    },
+    {
+      "id": "occupancy-permit",
+      "order": 8,
+      "name": "Occupancy permit",
+      "nameMk": "Одобрение за употреба",
+      "icon": "🔑"
+    }
+  ],
+  "docTypes": [
+    {
+      "id": "land-contract",
+      "name": "Land contract",
+      "nameMk": "Договор за земјиште",
+      "stage": "land-contract",
+      "icon": "📜",
+      "fields": [
+        "counterparty",
+        "notary",
+        "reference"
+      ]
+    },
+    {
+      "id": "imoten-list",
+      "name": "Property extract",
+      "nameMk": "Имотен лист",
+      "stage": "ownership",
+      "icon": "🗺️",
+      "fields": [
+        "imotenList",
+        "parcelNo",
+        "cadastralMunicipality"
+      ]
+    },
+    {
+      "id": "dup-extract",
+      "name": "Urban plan extract",
+      "nameMk": "Извод од ДУП",
+      "stage": "urban-plan",
+      "icon": "🏙️",
+      "fields": [
+        "authority",
+        "reference",
+        "planName"
+      ]
+    },
+    {
+      "id": "design-project",
+      "name": "Design documentation",
+      "nameMk": "Проектна документација",
+      "stage": "design",
+      "icon": "📐",
+      "fields": [
+        "firm",
+        "phase",
+        "reference"
+      ]
+    },
+    {
+      "id": "construction-permit",
+      "name": "Construction permit",
+      "nameMk": "Одобрение за градење",
+      "stage": "construction-permit",
+      "icon": "✅",
+      "fields": [
+        "authority",
+        "reference",
+        "validUntil"
+      ]
+    },
+    {
+      "id": "construction-record",
+      "name": "Construction record",
+      "nameMk": "Градежен дневник",
+      "stage": "construction",
+      "icon": "🏗️",
+      "fields": [
+        "supervisor",
+        "period"
+      ]
+    },
+    {
+      "id": "technical-inspection",
+      "name": "Technical inspection report",
+      "nameMk": "Записник за технички преглед",
+      "stage": "technical-inspection",
+      "icon": "🔍",
+      "fields": [
+        "authority",
+        "reference"
+      ]
+    },
+    {
+      "id": "occupancy-permit",
+      "name": "Occupancy permit",
+      "nameMk": "Одобрение за употреба",
+      "stage": "occupancy-permit",
+      "icon": "🔑",
+      "fields": [
+        "authority",
+        "reference"
+      ]
+    },
+    {
+      "id": "other",
+      "name": "Other document",
+      "nameMk": "Друг документ",
+      "icon": "📄",
+      "fields": [
+        "issuer",
+        "reference"
+      ]
+    }
+  ],
+  "expenses": [
+    {
+      "id": "968259df-41f5-4d56-b6a3-f1873b657b1f",
+      "date": "2026-04-30",
+      "amount": 3000,
+      "currency": "EUR",
+      "vendor": "Naser mjeshtri",
+      "category": "labor",
+      "description": "Avans 30%",
+      "project": "hotel"
+    },
+    {
+      "id": "4b08991e-1ab7-4b52-b24f-40e6cd46aea9",
+      "date": "2026-05-09",
+      "amount": 1000,
+      "currency": "EUR",
+      "vendor": "Radika - Sami",
+      "category": "materials",
+      "description": "Grill, tampon, gryerje",
+      "project": "hotel"
+    },
+    {
+      "id": "a76940f1-c6c1-4a3a-bcc4-cfc8f9fec73f",
+      "date": "2026-05-09",
+      "amount": 400,
+      "currency": "EUR",
+      "vendor": "Gjeodeti",
+      "category": "permits",
+      "description": "Vendosja e pikave",
+      "project": "hotel"
+    },
+    {
+      "id": "6dcef972-84c3-49d6-acc5-73defb651212",
+      "date": "2026-05-19",
+      "amount": 300,
+      "currency": "EUR",
+      "vendor": "Naser mjeshtri",
+      "category": "labor",
+      "description": "300€ i ka mare ne leshkë.",
+      "project": "hotel"
+    },
+    {
+      "id": "b2088d37-ba39-4d60-8e95-cd1b0de0e685",
+      "date": "2026-05-26",
+      "amount": 1800,
+      "currency": "EUR",
+      "vendor": "Radika - Sami",
+      "category": "materials",
+      "project": "hotel"
+    },
+    {
+      "id": "23378702-c052-4482-a208-92c15b3fc1c2",
+      "date": "2026-05-30",
+      "amount": 120,
+      "currency": "EUR",
+      "vendor": "Naser mjeshtri",
+      "category": "labor",
+      "description": "Montim letra zéz.",
+      "project": "hotel"
+    },
+    {
+      "id": "5514bf1e-7772-4f6d-a7eb-34f8f178d89f",
+      "date": "2026-05-30",
+      "amount": 2000,
+      "currency": "MKD",
+      "vendor": "Radika",
+      "category": "materials",
+      "description": "Leter e zeze 10 m2",
+      "project": "hotel"
+    },
+    {
+      "id": "629d273c-238f-43c8-881e-442fc3009535",
+      "date": "2026-05-30",
+      "amount": 10000,
+      "currency": "MKD",
+      "vendor": "Radika",
+      "category": "materials",
+      "description": "Cement 40 thas",
+      "project": "hotel"
+    },
+    {
+      "id": "9cc96b20-0895-4e30-8e0b-a21e5c9f870c",
+      "date": "2026-05-30",
+      "amount": 1000,
+      "currency": "EUR",
+      "vendor": "Radika",
+      "category": "materials",
+      "description": "Hekur\nShipka 60 copa fi 12\nMrezha  16 copa fi 8",
+      "project": "hotel"
+    },
+    {
+      "id": "b8cab2a4-5313-4962-927a-21a29dc90bdb",
+      "date": "2026-05-30",
+      "amount": 12000,
+      "currency": "MKD",
+      "vendor": "Niti kom",
+      "category": "materials",
+      "description": "Letra e zezë, 80m2 10.800\nGozhda 10 kg - 8she 1200 den",
+      "project": "hotel"
+    },
+    {
+      "id": "c91c7aee-7c44-4faf-86cc-3ac25132e996",
+      "date": "2026-05-30",
+      "amount": 227,
+      "currency": "EUR",
+      "vendor": "Hekur Zgjimi",
+      "category": "materials",
+      "project": "hotel"
+    },
+    {
+      "id": "dce261b3-5091-4f51-bdc5-d34d6423e64d",
+      "date": "2026-05-31",
+      "amount": 200,
+      "currency": "EUR",
+      "vendor": "Naser mjeshtri",
+      "category": "labor",
+      "description": "Avans Te spitali",
+      "project": "hotel"
+    },
+    {
+      "id": "5bea02c4-a7fa-4b77-9bee-fb2c476d8077",
+      "date": "2026-06-04",
+      "amount": 520,
+      "currency": "EUR",
+      "vendor": "Makalb",
+      "category": "materials",
+      "attachments": [
+        {
+          "file": "files/e4917c43-5864-4697-980c-0e4ed3853ee1.jpeg",
+          "originalName": "image.jpg",
+          "mime": "image/jpeg",
+          "size": 142454,
+          "uploaded": "2026-06-04T08:00:29.683Z",
+          "sha256": "cbf18d13b74bf36a195d222e99e5032fe859b047ddd1e297d0e508567f8d92fa",
+          "extractedText": "MATERIALI | TORINAK\n75 (crossed out)\n3600\n 550\n————\n4150\n1 Oker\n0|300| Braun\n0|080| Rot"
+        }
+      ],
+      "project": "skopje-k-voda"
+    },
+    {
+      "id": "3d1044c2-927d-4c9e-857e-d9c1dc751f4f",
+      "date": "2026-06-06",
+      "amount": 680,
+      "currency": "EUR",
+      "vendor": "Radika",
+      "category": "materials",
+      "description": "Cement 160 thas",
+      "project": "hotel"
+    },
+    {
+      "id": "8d7ef648-c900-4c8a-93e1-e4d72e4b7358",
+      "date": "2026-06-06",
+      "amount": 380,
+      "currency": "EUR",
+      "vendor": "Radika",
+      "category": "materials",
+      "description": "Stirodur 70m 2",
+      "project": "hotel"
+    },
+    {
+      "id": "8e493c0f-966f-4ae0-85e5-c52c165bfe09",
+      "date": "2026-06-06",
+      "amount": 2000,
+      "currency": "MKD",
+      "vendor": "Tetove",
+      "category": "materials",
+      "description": "Tel 20kg",
+      "project": "hotel"
+    },
+    {
+      "id": "52d033c4-2660-4ab9-b969-8d0c9b793ccd",
+      "date": "2026-06-10",
+      "amount": 2380,
+      "currency": "MKD",
+      "vendor": "Ceva plastik per ne temel odvod",
+      "category": "materials",
+      "attachments": [
+        {
+          "file": "files/f5c234c7-2834-44aa-af4e-2cbe585b8fc2.jpeg",
+          "originalName": "image.jpg",
+          "mime": "image/jpeg",
+          "size": 505457,
+          "uploaded": "2026-06-10T15:46:59.607Z",
+          "sha256": "c18d5de4a7c9c9b08e4c12c853440f7e7125e3226cc1139e04b810ff26421cad"
+        }
+      ],
+      "project": "hotel"
+    },
+    {
+      "id": "56eb7b67-524a-46b5-bf77-90bb0e6e5cd0",
+      "date": "2026-06-13",
+      "amount": 10500,
+      "currency": "MKD",
+      "vendor": "Cement 40 thas, gati per stubat",
+      "category": "materials",
+      "project": "hotel"
+    },
+    {
+      "id": "691152b0-502e-4bb3-bc6a-6cbb85b38bf6",
+      "date": "2026-06-14",
+      "amount": 700,
+      "currency": "EUR",
+      "vendor": "Naser mjeshtri 700€ per hekurin, komplet 1200€ hekuri",
+      "category": "labor",
+      "project": "hotel"
+    },
+    {
+      "id": "86680727-91f7-4c49-a5af-0677ce563fc1",
+      "date": "2026-06-18",
+      "amount": 10400,
+      "currency": "MKD",
+      "vendor": "Radika - hekur 20 shipka",
+      "category": "materials",
+      "project": "hotel"
+    },
+    {
+      "id": "72d03dbb-fd36-4ac2-9a49-35c20308f02b",
+      "date": "2026-06-24",
+      "amount": 500,
+      "currency": "EUR",
+      "vendor": "Naser mjeshtri",
+      "category": "labor",
+      "description": "Ne xhepçisht",
+      "project": "hotel"
+    },
+    {
+      "id": "34f3d3c2-043b-4c84-a0da-64c028456fdc",
+      "date": "2026-06-25",
+      "amount": 69420,
+      "currency": "MKD",
+      "vendor": "Radika",
+      "category": "materials",
+      "description": "Shipka fi 12 x 80 cope\nCement 107 thasë",
+      "attachments": [
+        {
+          "file": "files/e68755f8-7b6c-4544-9319-559c0793a6c5.jpeg",
+          "originalName": "image.jpg",
+          "mime": "image/jpeg",
+          "size": 220961,
+          "uploaded": "2026-06-25T16:03:35.363Z",
+          "sha256": "64efee8430ed94130a9bdd58bb56ec29b5a591356c92a052d014412de537f4b8",
+          "extractedText": "Наим - Аат - Пепол.\n- Цемент:  107 x 260 = 27.820\n- Ф12 -     80 x 520 = 41.600\n                       ————————\n                        69.420\nПЛАТЕНО ВО ГОТОВО\nRadika\nMLADOST\n25.06.26"
+        }
+      ],
+      "project": "hotel"
+    },
+    {
+      "id": "951f3358-9cbb-437b-90d1-036e263608dd",
+      "date": "2026-06-27",
+      "amount": 1498,
+      "currency": "EUR",
+      "vendor": "Iso - tetovo - fergreda + monta",
+      "category": "materials",
+      "project": "hotel"
+    },
+    {
+      "id": "f9ccb338-4afc-4a7f-a8d0-93f8827909e8",
+      "date": "2026-06-27",
+      "amount": 300,
+      "currency": "EUR",
+      "vendor": "Naser mjeshtri",
+      "category": "transport",
+      "description": "Transporti fer greda + cigllat",
+      "project": "hotel"
+    },
+    {
+      "id": "04c0fce2-6367-4e3b-a316-6ae18eafc153",
+      "date": "2026-07-02",
+      "amount": 500,
+      "currency": "EUR",
+      "vendor": "Radika",
+      "category": "materials",
+      "description": "Stirodur 20 m2\n12 mrezha",
+      "project": "hotel"
+    },
+    {
+      "id": "3e021150-21c5-471b-acab-9ec2dd549aa0",
+      "date": "2026-07-11",
+      "amount": 3000,
+      "currency": "MKD",
+      "vendor": "Musa",
+      "category": "materials",
+      "description": "Pvc ceva per katin nalt - odvod",
+      "project": "hotel"
+    },
+    {
+      "id": "838f85d5-6f7e-448a-99df-717f8087b5dd",
+      "date": "2026-07-11",
+      "amount": 730,
+      "currency": "EUR",
+      "vendor": "Samija radika",
+      "category": "materials",
+      "description": "Grill 20 kubik me transport",
+      "project": "hotel"
+    },
+    {
+      "id": "7123ea3b-2732-45cc-b893-46752f367786",
+      "date": "2026-07-13",
+      "amount": 1000,
+      "currency": "EUR",
+      "vendor": "Naser mjeshtri",
+      "category": "labor",
+      "description": "Jetmiri e ka pagujt",
+      "project": "hotel"
+    },
+    {
+      "id": "92f4fce0-37a5-40f9-ac7a-05045f04e583",
+      "date": "2026-07-14",
+      "amount": 1500,
+      "currency": "EUR",
+      "vendor": "Naser mjeshtri",
+      "category": "labor",
+      "description": "Pagesa pllocha 2 - te goldi xhepchisht",
+      "project": "hotel"
+    },
+    {
+      "id": "fc4520c4-db49-42c1-ac5a-28f695ece9e5",
+      "date": "2026-07-16",
+      "amount": 200,
+      "currency": "EUR",
+      "vendor": "Te",
+      "category": "transport",
+      "attachments": [
+        {
+          "file": "files/50a86d24-adfe-410b-b21f-7a0dd5a6f12f.jpeg",
+          "originalName": "image.jpg",
+          "mime": "image/jpeg",
+          "size": 156566,
+          "uploaded": "2026-07-16T07:33:15.283Z",
+          "sha256": "19e939c0827ca021656e3a391da2bad641cd70b65fcacb636e19e642ea041893",
+          "extractedText": "-1,00   166,32   7.983,40\n-1,00   166,32   7.983,40\n-1,00   166,32   3.991,70 €\n-1,00   166,32   3.991,70 €\n55.883,85 €\nRELEVANT 3.\nMODEL\n0,05  0,25  0,60  1,90  1,35  0,25  1,60\n0,800x0,800   1,600x2,000\n1,70  2,19  2,20\n20000\n31   247"
+        }
+      ],
+      "project": "skopje-k-voda"
+    }
+  ],
+  "documents": []
+}
